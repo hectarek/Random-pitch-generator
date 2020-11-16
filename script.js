@@ -1,4 +1,8 @@
-var synth = new Tone.FMSynth().toMaster();
+// Tone logic 
+
+const pitchButton = document.getElementById("pitch-button");
+
+var synth = new Tone.FMSynth().toDestination();
 
 const relativeTones = ["A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#"];
 const range = [["E", 2],["A#", 5],];
@@ -15,10 +19,13 @@ function generateAllTonesInRange(rng) {
 	const allTones = [];
 	let octaveCursor = startOctaveIndex;
 	let relativeCursor = startRelativeIndex;
+
 	while (tupleToAbsoluteTone([relativeCursor, octaveCursor]) != tupleToAbsoluteTone([finalRelativeIndex + 1, finalOctaveIndex])) {
+
 		allTones.push([relativeTones[relativeCursor], octaveCursor]);
 
 		relativeCursor = relativeCursor + 1;
+
 		if (relativeCursor >= relativeTones.length) {
 			relativeCursor = 0;
 			octaveCursor = octaveCursor + 1;
@@ -50,4 +57,8 @@ Tone.Transport.schedule(
 	triggerSynth(() => randToneFromRange(range)),0);
 
 //start/stop the transport
-document.querySelector("tone-play-toggle").addEventListener("change", (e) => Tone.Transport.toggle());
+pitchButton.addEventListener("click", async () => {
+	await Tone.start();
+	const now = Tone.now();
+	synth.triggerAttackRelease(randToneFromRange(range), "8n", now);
+});

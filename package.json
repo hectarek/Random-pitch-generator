@@ -1,0 +1,22 @@
+{
+  "name": "random-pitch-generator",
+  "version": "1.0.0",
+  "description": "### Idea by Robert",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hectarek/Random-pitch-generator.git"
+  },
+  "author": "Hector Gonzalez",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hectarek/Random-pitch-generator/issues"
+  },
+  "homepage": "https://github.com/hectarek/Random-pitch-generator#readme",
+  "dependencies": {
+    "tone": "^14.7.58"
+  }
+}
