@@ -6,7 +6,7 @@
 
 ## What it does:
 
-- Spits out random pitches (TODO)
+- Spits out random pitches (Done)
 - Has adjustable range (TODO)
 - Has adjustable note sustain (TODO)
 - Has adjustable rest sustain (TODO)
