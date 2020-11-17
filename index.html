@@ -10,6 +10,7 @@
                 width: 100%;
                 height: 100vh;
                 display: flex;
+                flex-direction: column;
                 justify-content: center;
                 align-items: center;
             }
@@ -20,11 +21,36 @@
                 justify-content: center;
                 align-items: center;
             }
+
+            .range-container {
+                display: flex;
+                flex-direction: row;
+                justify-content: space-around;
+            }
         </style>
 	</head>
 	<body>
         
         <div class="container">
+
+            <div class="container-box">
+                <h1>Random Pitch Generator</h1>
+            </div>
+
+            <div class="container-box" >
+                <h2>Adjust the Range</h2>
+                <div class="range-contaner">
+                    <div class="range-box">
+                        <label for="range-min">Min:</label>
+                        <select name="range-min" id="range-min"></select>
+                    </div>
+                    <div class="range-box">
+                        <label for="range-max">Max:</label>
+                        <select name="range-max" id="range-max"></select>
+                    </div>
+                </div>
+            </div>
+            
             <div class="container-box">
                 <h2>Random Pitch</h2>
                 <button id="pitch-button">Click Here</button>
