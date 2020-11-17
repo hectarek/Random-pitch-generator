@@ -7,8 +7,8 @@
 ## What it does:
 
 - Spits out random pitches (Done)
-- Has adjustable range (TODO)
-- Has adjustable note sustain (TODO)
+- Has adjustable range (Done, needs error checking)
+- Has adjustable note sustain (Done)
 - Has adjustable rest sustain (TODO)
 - Has adjustable tempo (w/ click) (TODO)
 - Note name visual toggle (C) (TODO)

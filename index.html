@@ -25,7 +25,7 @@
             .range-container {
                 display: flex;
                 flex-direction: row;
-                justify-content: space-around;
+                justify-content: space-between;
             }
         </style>
 	</head>
@@ -37,9 +37,9 @@
                 <h1>Random Pitch Generator</h1>
             </div>
 
-            <div class="container-box" >
+            <div class="container-box">
                 <h2>Adjust the Range</h2>
-                <div class="range-contaner">
+                <div class="range-container">
                     <div class="range-box">
                         <label for="range-min">Min:</label>
                         <select name="range-min" id="range-min"></select>
@@ -50,7 +50,23 @@
                     </div>
                 </div>
             </div>
-            
+
+            <div class="container-box">
+                <h2>Note Sustain</h2>
+                <div class="sustain-box">
+                    <label for="sustain">Choose Sustain Value:</label>
+                    <select name="sustain" id="sustain"></select>
+                </div>
+            </div>
+
+            <div class="container-box">
+                <h2>Rest Duration</h2>
+                <div class="sustain-box">
+                    <label for="sustain">Choose Rest Duration:</label>
+                    <select name="rest" id="rest"></select>
+                </div>
+            </div>
+
             <div class="container-box">
                 <h2>Random Pitch</h2>
                 <button id="pitch-button">Click Here</button>

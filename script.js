@@ -3,6 +3,14 @@
 const pitchButton = document.getElementById("pitch-button");
 const rangeMinBox = document.getElementById('range-min');
 const rangeMaxBox = document.getElementById('range-max');
+const sustainBox = document.getElementById('sustain');
+
+sustainBox.options[sustainBox.options.length] = new Option('Whole Note', '1n', true, true);
+sustainBox.options[sustainBox.options.length] = new Option('Half Note', '2n');
+sustainBox.options[sustainBox.options.length] = new Option('Quarter Note', '4n');
+sustainBox.options[sustainBox.options.length] = new Option('Eighth Note', '8n');
+
+let sustainValue = sustainBox.value;
 
 rangeMinBox.options[rangeMinBox.options.length] = new Option('none', 'none', true, true);
 rangeMaxBox.options[rangeMinBox.options.length] = new Option('none', 'none', true, true);
@@ -52,6 +60,11 @@ rangeMaxBox.addEventListener('change', () => {
 	tonalMaxRange = newTonalMax;
 })
 
+// change the sustain value on change
+sustainBox.addEventListener("change", () => {
+	sustainValue = sustainBox.value;
+})
+
 function generateAllTonesInRange(rng) {
 	const minTone = rng[0];
 	const maxTone = rng[1];
@@ -88,6 +101,21 @@ function tupleToAbsoluteTone(tuple) {
 	return `${tuple[0]}${tuple[1]}`;
 }
 
+// THIS FUNCTION NEEDS WORK
+function validateRange() {
+	try {
+		if (tonalMinRange == 'none' || tonalMaxRange == 'none') {
+			console.log('Select range');
+		} else if (tonalMinRange[1] > tonalMaxRange[1]){
+			console.log('error');
+		} else {
+			return range = [tonalMinRange,tonalMaxRange];
+		}
+	} catch (error) {
+		console.log(error); 
+	}
+}
+
 // //this function is called right before the scheduled time
 // function triggerSynth(noteGenerator) {
 // 	//the time is the sample-accurate time of the event
@@ -104,7 +132,8 @@ function tupleToAbsoluteTone(tuple) {
 pitchButton.addEventListener("click", async () => {
 	await Tone.start();
 	const now = Tone.now();
-	range = [tonalMinRange,tonalMaxRange];
-	synth.triggerAttackRelease(randToneFromRange(range), "8n", now + 0.2);
+	validateRange();
+	console.log(sustainValue);
+	synth.triggerAttackRelease(randToneFromRange(range), sustainValue, now + 0.2);
 });
 
