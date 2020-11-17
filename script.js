@@ -1,8 +1,5 @@
 // Tone logic 
 
-let tonalMinRange = ["E", 2];
-let tonalMaxRange = ["A#", 5];
-
 const pitchButton = document.getElementById("pitch-button");
 const rangeMinBox = document.getElementById('range-min');
 const rangeMaxBox = document.getElementById('range-max');
@@ -12,50 +9,47 @@ rangeMaxBox.options[rangeMinBox.options.length] = new Option('none', 'none', tru
 
 var synth = new Tone.FMSynth().toDestination();
 
+let tonalMinRange = ["E", 2];
+let tonalMaxRange = ["A#", 5];
+
 const relativeTones = ["A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#"];
 let range = [tonalMinRange,tonalMaxRange];
-const allTones = generateAllTonesInRange(range);
+let allTones = generateAllTonesInRange(range);
 
-console.log(allTones);
 
 // fill option boxed with range.
 allTones.forEach((tone) => {
 	let toneString = tone[0]+tone[1];
-	console.log(toneString);
 	rangeMinBox.options[rangeMinBox.options.length] = new Option(toneString, toneString);
 	rangeMaxBox.options[rangeMinBox.options.length] = new Option(toneString, toneString);
 }) 
 
-// change the range to what the user selects.
+// change the min range to what the user selects.
 rangeMinBox.addEventListener('change', () => {
 	console.log(rangeMinBox.value);
 	const newTonalMin = [];
 	if (rangeMinBox.value.length === 2) {
 		newTonalMin.push(rangeMinBox.value[0]);
-		newTonalMin.push(rangeMinBox.value[1]);
-		tonalMinRange = newTonalMin;
+		newTonalMin.push(parseInt(rangeMinBox.value[1]));
 	} else {
 		newTonalMin.push(rangeMinBox.value[0]+rangeMinBox.value[1]);
-		newTonalMin.push(rangeMinBox.value[2]);
-		tonalMinRange = newTonalMin;
+		newTonalMin.push(parseInt(rangeMinBox.value[2]));
 	}
+	tonalMinRange = newTonalMin;
 })
 
-// NEED TO FIX: the range used in the random note gen is not being updated
-//   when the change happens. Because of this the range is the default one. 
-
+// change the max range to what the user selects.
 rangeMaxBox.addEventListener('change', () => {
 	console.log(rangeMaxBox.value);
 	const newTonalMax = [];
-	if (rangeMinBox.value.length === 2) {
-		newTonalMax.push(rangeMinBox.value[0]);
-		newTonalMax.push(rangeMinBox.value[1]);
-		tonalMaxRange = newTonalMax;
+	if (rangeMaxBox.value.length === 2) {
+		newTonalMax.push(rangeMaxBox.value[0]);
+		newTonalMax.push(parseInt(rangeMaxBox.value[1]));
 	} else {
-		newTonalMax.push(rangeMinBox.value[0]+rangeMinBox.value[1]);
-		newTonalMax.push(rangeMinBox.value[2]);
-		tonalMaxRange = newTonalMax;
+		newTonalMax.push(rangeMaxBox.value[0]+rangeMaxBox.value[1]);
+		newTonalMax.push(parseInt(rangeMaxBox.value[2]));
 	}
+	tonalMaxRange = newTonalMax;
 })
 
 function generateAllTonesInRange(rng) {
@@ -94,24 +88,23 @@ function tupleToAbsoluteTone(tuple) {
 	return `${tuple[0]}${tuple[1]}`;
 }
 
-//this function is called right before the scheduled time
-function triggerSynth(noteGenerator) {
-	//the time is the sample-accurate time of the event
-	return (time) => synth.triggerAttackRelease(noteGenerator(), 0.5, time);
-}
+// //this function is called right before the scheduled time
+// function triggerSynth(noteGenerator) {
+// 	//the time is the sample-accurate time of the event
+// 	return (time) => synth.triggerAttackRelease(noteGenerator(), 0.5, time);
+// }
 
-Tone.Transport.loopEnd = "1m";
-Tone.Transport.loop = true;
+// Tone.Transport.loopEnd = "1m";
+// Tone.Transport.loop = true;
 
-//schedule a few notes
-Tone.Transport.schedule(
-	triggerSynth(() => randToneFromRange(range)),0);
+// //schedule a few notes
+// Tone.Transport.schedule(triggerSynth(() => randToneFromRange(range)),0);
 
 // Click the button for a random note.
 pitchButton.addEventListener("click", async () => {
 	await Tone.start();
 	const now = Tone.now();
-	console.log(range);
-	synth.triggerAttackRelease(randToneFromRange(range), "8n", now);
+	range = [tonalMinRange,tonalMaxRange];
+	synth.triggerAttackRelease(randToneFromRange(range), "8n", now + 0.2);
 });
 
