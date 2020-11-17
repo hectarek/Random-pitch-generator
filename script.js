@@ -1,6 +1,7 @@
 // Tone logic 
 
 const pitchButton = document.getElementById("pitch-button");
+const howManyNotesBox = document.getElementById('notes');
 const rangeMinBox = document.getElementById('range-min');
 const rangeMaxBox = document.getElementById('range-max');
 const sustainBox = document.getElementById('sustain');
@@ -23,6 +24,13 @@ let tonalMaxRange = ["A#", 5];
 const relativeTones = ["A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#"];
 let range = [tonalMinRange,tonalMaxRange];
 let allTones = generateAllTonesInRange(range);
+
+// fill notes option box with numbers 
+howManyNotesBox.options[howManyNotesBox.options.length] = new Option(1, 1, true, true);
+
+for (i=2; i<9; i++) {
+	howManyNotesBox.options[howManyNotesBox.options.length] = new Option(i, i);
+}
 
 
 // fill option boxed with range.
@@ -134,6 +142,8 @@ pitchButton.addEventListener("click", async () => {
 	const now = Tone.now();
 	validateRange();
 	console.log(sustainValue);
-	synth.triggerAttackRelease(randToneFromRange(range), sustainValue, now + 0.2);
+	for (i=0; i < howManyNotesBox.value; i++) {
+		synth.triggerAttackRelease(randToneFromRange(range), sustainValue, now + i);
+	}
 });
 
