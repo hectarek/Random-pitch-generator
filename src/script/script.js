@@ -5,13 +5,17 @@ const howManyNotesBox = document.getElementById('notes');
 const rangeMinBox = document.getElementById('range-min');
 const rangeMaxBox = document.getElementById('range-max');
 const sustainBox = document.getElementById('sustain');
+const restBox = document.getElementById('rest');
 
 sustainBox.options[sustainBox.options.length] = new Option('Whole Note', '1n', true, true);
 sustainBox.options[sustainBox.options.length] = new Option('Half Note', '2n');
 sustainBox.options[sustainBox.options.length] = new Option('Quarter Note', '4n');
 sustainBox.options[sustainBox.options.length] = new Option('Eighth Note', '8n');
 
-let sustainValue = sustainBox.value;
+restBox.options[restBox.options.length] = new Option('1 Second', 1, true, true);
+restBox.options[restBox.options.length] = new Option('2 Second', 2);
+restBox.options[restBox.options.length] = new Option('3 Second', 3);
+restBox.options[restBox.options.length] = new Option('4 Second', 4);
 
 rangeMinBox.options[rangeMinBox.options.length] = new Option('none', 'none', true, true);
 rangeMaxBox.options[rangeMinBox.options.length] = new Option('none', 'none', true, true);
@@ -24,6 +28,9 @@ let tonalMaxRange = ["A#", 5];
 const relativeTones = ["A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#"];
 let range = [tonalMinRange,tonalMaxRange];
 let allTones = generateAllTonesInRange(range);
+
+let sustainValue = sustainBox.value;
+let restValue = restBox.value;
 
 // fill notes option box with numbers 
 howManyNotesBox.options[howManyNotesBox.options.length] = new Option(1, 1, true, true);
