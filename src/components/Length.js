@@ -7,13 +7,14 @@ export function Length(props) {
 		<div className={props.styles.root}>
 			<Typography id="discrete-slider-small-steps" gutterBottom>Note Length</Typography>
 			<Slider
-				defaultValue={3}
+				defaultValue={1}
+				onChange={props.handleChange} 
 				aria-labelledby="discrete-slider-small-steps"
 				step={1}
-				marks
-				min={0}
-				max={10}
-				valueLabelDisplay="auto"
+				valueLabelDisplay="off"
+				marks={props.noteLengths}
+				min={1}
+				max={4}
 			/>
 	</div>
 	);

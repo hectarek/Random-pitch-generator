@@ -7,10 +7,10 @@ export function Switches(props) {
 		<div className="container-box tad-margin">
             <Typography id="range-slider" gutterBottom>{props.text}</Typography>
             <Switch 
-                checked={props.checked} 
+                checked={props.check} 
                 onChange={props.handleChange} 
                 color="primary" 
-                name="checkedB" 
+                name={props.name}
                 inputProps={{ "aria-label": "primary checkbox" }}
             />
 		</div>

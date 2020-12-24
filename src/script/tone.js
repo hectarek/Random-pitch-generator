@@ -1,3 +1,5 @@
+import * as Tone from 'tone';
+
 var synth = new Tone.FMSynth().toDestination();
 
 let tonalMinRange = ["E", 2];
@@ -42,3 +44,42 @@ function randToneFromRange(rng) {
 function tupleToAbsoluteTone(tuple) {
 	return `${tuple[0]}${tuple[1]}`;
 }
+
+// THIS FUNCTION NEEDS WORK
+function validateRange() {
+	try {
+		if (tonalMinRange == 'none' || tonalMaxRange == 'none') {
+			console.log('Select range');
+		} else if (tonalMinRange[1] > tonalMaxRange[1]){
+			console.log('error');
+		} else {
+			return range = [tonalMinRange,tonalMaxRange];
+		}
+	} catch (error) {
+		console.log(error); 
+	}
+}
+
+// //this function is called right before the scheduled time
+// function triggerSynth(noteGenerator) {
+// 	//the time is the sample-accurate time of the event
+// 	return (time) => synth.triggerAttackRelease(noteGenerator(), 0.5, time);
+// }
+
+// Tone.Transport.loopEnd = "1m";
+// Tone.Transport.loop = true;
+
+// //schedule a few notes
+// Tone.Transport.schedule(triggerSynth(() => randToneFromRange(range)),0);
+
+// Click the button for a random note.
+// pitchButton.addEventListener("click", async () => {
+// 	await Tone.start();
+// 	const now = Tone.now();
+// 	validateRange();
+// 	console.log(sustainValue);
+// 	for (i=0; i < howManyNotesBox.value; i++) {
+// 		synth.triggerAttackRelease(randToneFromRange(range), sustainValue, now + i);
+// 	}
+// });
+

@@ -1,6 +1,6 @@
 // RANGE
 
-export const noteFrequencies = new Map([
+const noteFrequencies = new Map([
 	["C0", 16.35],
 	["C#0", 17.32],
 	["Db0", 17.32],
@@ -156,7 +156,7 @@ export const noteFrequencies = new Map([
 	["B8", 7902.13],
 ]);
 
-export const rangeForSlider = new Map([
+const rangeForSlider = new Map([
 	[1, { name: "C0", frequency: 16.35 }],
 	[2, { name: "C#0/Db0", frequency: 17.32 }],
 	[3, { name: "D0", frequency: 18.35 }],
@@ -266,3 +266,5 @@ export const rangeForSlider = new Map([
 	[107, { name: "A#8/Bb8", frequency: 7458.62 }],
 	[108, { name: "B8", frequency: 7902.13 }],
 ]);
+
+export default rangeForSlider;

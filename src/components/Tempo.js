@@ -5,14 +5,14 @@ import Slider from '@material-ui/core/Slider';
 export function Tempo(props) {
 	return (
 		<div className={props.styles.root}>
-			<Typography id="discrete-slider-small-steps" gutterBottom>Tempo</Typography>
+			<Typography id="tempo-markings" gutterBottom>Tempo</Typography>
 			<Slider
-				defaultValue={3}
-				aria-labelledby="discrete-slider-small-steps"
+				defaultValue={60}
+				onChange={props.handleChange} 
+				aria-labelledby="tempo-markings"
 				step={1}
-				marks
 				min={0}
-				max={10}
+				max={400}
 				valueLabelDisplay="auto"
 			/>
 	</div>

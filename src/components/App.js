@@ -16,9 +16,30 @@ import { Tempo } from './Tempo';
 import { makeStyles } from '@material-ui/core/styles';
 
 // Logic Imports
+import instruments from '../script/instruments';
+import keys from '../script/keys';
+import scales from '../script/scales';
+
+// Note Lengths
+
+const noteLengths = [{
+    value: 1,
+    label: 'Eighth',
+  },
+  {
+    value: 2,
+    label: 'Quarter',
+  },
+  {
+    value: 3,
+    label: 'Half',
+  },
+  {
+    value: 4,
+    label: 'Whole',
+  }];
 
 // useStyles 
-
 const useStyles = makeStyles({
   root: {
     width: 300,
@@ -29,97 +50,110 @@ export default function App() {
 
   const classes = useStyles();
 
-  const [currency, setCurrency] = useState([
-    {
-      value: 'USD',
-      label: '$',
-    },
-    {
-      value: 'EUR',
-      label: '€',
-    },
-    {
-      value: 'BTC',
-      label: '฿',
-    },
-    {
-      value: 'JPY',
-      label: '¥',
-    },
-  ]);
+  // Setting Application State
+  const [instrument, setInstrument] = useState("");
+  const [scale, setScale] = useState("");
+  const [key, setKey] = useState("");
 
-  const [value, setValue] = useState([20, 37]);
-
-  const [checked, setChecked] = useState({
-    isChecked: true,
+  const [switches, setSwitches] = useState({
+    drone: true,
+    octaveLimit: true,
   });
 
-  const handleSliderChange = (event, newValue) => {
-    setValue(newValue);
+  const [range, setRange] = useState([37, 61]);
+  const [length, setLength] = useState();
+  const [rest, setRest] = useState();
+  const [tempo, setTempo] = useState();
+
+  // Handle Functions
+  const handleInstrumentPickerChange = (event) => {
+    setInstrument(event.target.value);
+  };
+  const handleScalePickerChange = (event) => {
+    setScale(event.target.value);
+  };
+  const handleKeyPickerChange = (event) => {
+    setKey(event.target.value);
   };
 
-  const handleChange = (event) => {
-    setChecked({ ...checked, [event.target.name]: event.target.checked });
+  const handleSwitchesChange = (event) => {
+    setSwitches({ ...switches, [event.target.name]: event.target.checked });
   };
 
-  const handlePickerChange = (event) => {
-    setCurrency(event.target.value);
+  const handleRangeSliderChange = (event, newValue) => {
+    setRange(newValue);
   };
-
+  const handleLengthSliderChange = (event, newValue) => {
+    setLength(newValue);
+  };
+  const handleRestSliderChange = (event, newValue) => {
+    setRest(newValue);
+  };
+  const handleTempoSliderChange = (event, newValue) => {
+    setTempo(newValue);
+  };
+  
 	return (
 		<div className="container">
 			<Title text={"Random Pitch Generator"}/>
       <Headings text={"INSTRUMENT"}/>
       <div className="range-container">
         <Picker 
-          value={currency}
-          currencies={currency}
+          value={instrument}
+          list={instruments}
           helperText={"Pick an Instrument"}
-          handleChange={handlePickerChange}
+          handleChange={handleInstrumentPickerChange}
         />
         <Picker 
-          value={currency}
-          currencies={currency}
+          value={scale}
+          list={scales}
           helperText={"Pick an Scale"}
-          handleChange={handlePickerChange}
+          handleChange={handleScalePickerChange}
         />
         <Picker 
-          value={currency}
-          currencies={currency}
+          value={key}
+          list={keys}
           helperText={"Pick an Key"}
-          handleChange={handlePickerChange}
+          handleChange={handleKeyPickerChange}
         />
       </div>
       <div className="range-container">
         <Switches 
           text={"Drone?"}
-          handleChange={handleChange}
-          checked={checked.isChecked}
+          handleChange={handleSwitchesChange}
+          check={switches.drone}
+          name={"drone"}
           />
           <Switches 
           text={"Limit Octave?"}
-          handleChange={handleChange}
-          checked={checked.isChecked}
+          handleChange={handleSwitchesChange}
+          check={switches.octaveLimit}
+          name={"octaveLimit"}
           />
       </div>  
       <Headings text={"PITCH"}/>
       <Range 
-        value={value}
+        value={range}
         styles={classes}
-        handleChange={handleSliderChange}
+        handleChange={handleRangeSliderChange}
       />
       <Headings text={"LENGTH"}/>
       <Length 
+        value={length}
         styles={classes}
-        handleChange={handleSliderChange}
+        noteLengths={noteLengths}
+        handleChange={handleLengthSliderChange}
       />
       <Rest 
+        value={rest}
         styles={classes}
-        handleChange={handleSliderChange}
+        noteLengths={noteLengths}
+        handleChange={handleRestSliderChange}
       />
       <Tempo 
+        value={tempo}
         styles={classes}
-        handleChange={handleSliderChange}
+        handleChange={handleTempoSliderChange}
       />
       <Play />
 		</div>

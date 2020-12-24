@@ -8,12 +8,13 @@ export function Rest(props) {
 			<Typography id="discrete-slider-small-steps" gutterBottom>Rest Length</Typography>
 			<Slider
 				defaultValue={3}
+				onChange={props.handleChange} 
 				aria-labelledby="discrete-slider-small-steps"
 				step={1}
-				marks
-				min={0}
-				max={10}
-				valueLabelDisplay="auto"
+				valueLabelDisplay="off"
+				marks={props.noteLengths}
+				min={1}
+				max={4}
 			/>
 	</div>
 	);
