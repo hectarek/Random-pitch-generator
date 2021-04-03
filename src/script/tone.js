@@ -1,15 +1,9 @@
-import * as Tone from 'tone';
-
-var synth = new Tone.FMSynth().toDestination();
-
-let tonalMinRange = ["E", 2];
-let tonalMaxRange = ["A#", 5];
+// Range Generation Logic for Tones
 
 const relativeTones = ["A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#"];
-let range = [tonalMinRange,tonalMaxRange];
-let allTones = generateAllTonesInRange(range);
 
-function generateAllTonesInRange(rng) {
+// rng accepts 2 value array ex. ['C3', 'C5']
+export const generateAllTonesInRange = (rng) => {
 	const minTone = rng[0];
 	const maxTone = rng[1];
 
@@ -36,28 +30,14 @@ function generateAllTonesInRange(rng) {
 	return allTones;
 }
 
-function randToneFromRange(rng) {
+// accepts the range made from the previous function
+export const randToneFromRange = (rng) => {
 	const allTones = generateAllTonesInRange(rng);
 	return tupleToAbsoluteTone(allTones[Math.floor(Math.random() * allTones.length)]);
 }
 
-function tupleToAbsoluteTone(tuple) {
+export const tupleToAbsoluteTone = (tuple) => {
 	return `${tuple[0]}${tuple[1]}`;
-}
-
-// THIS FUNCTION NEEDS WORK
-function validateRange() {
-	try {
-		if (tonalMinRange == 'none' || tonalMaxRange == 'none') {
-			console.log('Select range');
-		} else if (tonalMinRange[1] > tonalMaxRange[1]){
-			console.log('error');
-		} else {
-			return range = [tonalMinRange,tonalMaxRange];
-		}
-	} catch (error) {
-		console.log(error); 
-	}
 }
 
 // //this function is called right before the scheduled time
