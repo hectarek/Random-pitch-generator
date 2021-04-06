@@ -7,6 +7,7 @@
     "@testing-library/jest-dom": "^5.11.6",
     "@testing-library/react": "^11.2.2",
     "@testing-library/user-event": "^12.6.0",
+    "gh-pages": "^3.1.0",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-scripts": "4.0.1",
@@ -17,6 +18,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "deploy": "gh-pages -b main -d build",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -35,6 +37,7 @@
       "last 1 chrome version",
       "last 1 firefox version",
       "last 1 safari version"
-    ]
+    ],
+    "homepage": "https://hectarek.github.io/Random-pitch-generator/"
   }
 }
