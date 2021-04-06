@@ -1,5 +1,6 @@
 {
   "name": "random-pitch-generator",
+  "homepage": "https://hectarek.github.io/Random-pitch-generator/",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -18,7 +19,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "deploy": "gh-pages -b main -d build",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -37,7 +39,6 @@
       "last 1 chrome version",
       "last 1 firefox version",
       "last 1 safari version"
-    ],
-    "homepage": "https://hectarek.github.io/Random-pitch-generator/"
+    ]
   }
 }
