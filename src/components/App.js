@@ -20,7 +20,7 @@ import instruments from '../script/instruments';
 import keys from '../script/keys';
 import scales from '../script/scales';
 import octaves from '../script/octaves';
-import {generateAllTonesInRange, randToneFromRange} from '../script/tone';
+import {generateAllTonesInRange, randToneFromRange, tempoIntoSeconds} from '../script/tone';
 
 // Note Lengths
 
@@ -34,17 +34,17 @@ const useStyles = makeStyles({
 const instrumentsDemo = [
 	{
 		name: "MonoSynth",
-		sound: '',
+		sound: new Tone.MonoSynth().toDestination(),
 		range: [],
 	},
   {
 		name: "Synth",
-		sound: '',
+		sound: new Tone.Synth().toDestination(),
 		range: [],
 	},
   {
 		name: "MetalSynth",
-		sound: '',
+		sound: new Tone.MonoSynth().toDestination(),
 		range: [],
 	}
 ]
@@ -54,7 +54,7 @@ export default function App() {
   const classes = useStyles();
 
   // Setting Application State
-  const [instrument, setInstrument] = useState("");
+  const [instrument, setInstrument] = useState("Synth");
 
   const [rangeN1, setRangeN1] = useState("C");
   const [rangeO1, setRangeO1] = useState(3);
@@ -80,93 +80,71 @@ export default function App() {
 
   const [tones, setTones] = useState([]);
 
-  const [play, setPlay] = useState(false);
+  const [playStatus, setPlayStatus] = useState(false);
 
   // Handle Functions
-  const handleInstrumentPickerChange = (event) => {
-    setInstrument(event.target.value);
-  };
+  const handleInstrumentPickerChange = (event) => {setInstrument(event.target.value);};
+  const handleRangeN1PickerChange = (event) => {setRangeN1(event.target.value);};
+  const handleRangeO1PickerChange = (event) => {setRangeO1(event.target.value);};
+  const handleRangeN2PickerChange = (event) => {setRangeN2(event.target.value);};
+  const handleRangeO2PickerChange = (event) => {setRangeO2(event.target.value);};
+  const handleScalePickerChange = (event) => {setScale(event.target.value);};
+  const handleKeyPickerChange = (event) => {setKey(event.target.value);};
+  const handleSwitchesChange = (event) => {setSwitches({ ...switches, [event.target.name]: event.target.checked });};
+  const handleLengthSliderChange = (event, newValue) => {setLength(newValue);};
+  const handleRestSliderChange = (event, newValue) => {setRest(newValue);};
+  const handleTempoSliderChange = (event, newValue) => {setTempo(newValue);};
 
-  const handleRangeN1PickerChange = (event) => {
-    setRangeN1(event.target.value);
-  };
+  // *********************** INITIAL STATE LOGIC ***********************
 
-  const handleRangeO1PickerChange = (event) => {
-    setRangeO1(event.target.value);
-  };
+  let synth;
 
-  const handleRangeN2PickerChange = (event) => {
-    setRangeN2(event.target.value);
-  };
-
-  const handleRangeO2PickerChange = (event) => {
-    setRangeO2(event.target.value);
-  };
-
-  const handleScalePickerChange = (event) => {
-    setScale(event.target.value);
-  };
-  const handleKeyPickerChange = (event) => {
-    setKey(event.target.value);
-  };
-
-  const handleSwitchesChange = (event) => {
-    setSwitches({ ...switches, [event.target.name]: event.target.checked });
-  };
-
-  const handleLengthSliderChange = (event, newValue) => {
-    setLength(newValue);
-  };
-  const handleRestSliderChange = (event, newValue) => {
-    setRest(newValue);
-  };
-  const handleTempoSliderChange = (event, newValue) => {
-    setTempo(newValue);
-  };
-
-  // *********************** ACTIVE STATE LOGIC ***********************
-
-  let synth = instrumentsDemo.sound;
-
-  // Tone Generation
-  if(instrumentsDemo.name === "MonoSynth") {
-    instrumentsDemo.sound = Tone.MonoSynth().toDestination();
-  } else if (instrumentsDemo.name === "Synth") {
-    instrumentsDemo.sound = new Tone.Synth().toDestination();
-  } else if (instrumentsDemo.name === "MetalSynth") {
-    instrumentsDemo.sound = new Tone.MetalSynth().toDestination();
+  // Determining which sound is chosen
+  if(instrument === instrumentsDemo[0].name["MonoSynth"]) {
+    synth = instrumentsDemo[0].sound;
+  } else if (instrument === instrumentsDemo[1].name["Synth"]) {
+    synth = instrumentsDemo[1].sound;
+  } else if (instrument === instrumentsDemo[2].name["MetalSynth"]) {
+    synth = instrumentsDemo[2].sound;
   } else {
-    instrumentsDemo.sound = new Tone.MonoSynth().toDestination();
+    synth = instrumentsDemo[1].sound;
   }
+  
+  // Example of input [["E", 2],["A#", 5]];
+  let randomNoteRange = generateAllTonesInRange([[rangeN1, rangeO1], [rangeN2, rangeO2]]);
+  let randomNote = randToneFromRange([[rangeN1, rangeO1], [rangeN2, rangeO2]]);
+  let timeInSeconds = tempoIntoSeconds(tempo);
+
+  // Tone.Transport.timeSignature = 4;
+  // Tone.Transport.bpm.value = tempo;
+
+  const loopA = new Tone.Loop(time => {
+    synth.triggerAttackRelease(randomNote, "4n", time);
+  }, "1n").start('8n');
+
+  loopA.loop = true;
+  loopA.loopEnd = "1m";
   
   useEffect(() => {
 
   })
 
-  // *********************** END ACTIVE STATE LOGIC ***********************
+  // *********************** END INITIAL STATE LOGIC ***********************
 
 
   // *********************** PLAY BUTTON LOGIC ***********************
 
   const handleClick = async () => {
 
-     // Example of input [["E", 2],["A#", 5]];
-    let randomNoteRange = generateAllTonesInRange([[rangeN1, rangeO1], [rangeN2, rangeO2]]);
-    let randomNote = randToneFromRange([[rangeN1, rangeO1], [rangeN2, rangeO2]]);
-
     console.log(randomNoteRange);
     console.log(randomNote);
-
-    await Tone.start();
-    const now = Tone.now();
-    synth.triggerAttackRelease(randomNote, "8n", now);
-
-    if(!play) {
-    
-      setPlay(true);
+  
+    if(!playStatus) {
+      await Tone.Transport.start();
+      setPlayStatus(true);
     } else {
-
-      setPlay(false);
+      await Tone.Transport.stop();
+      setPlayStatus(false);
     }
   };
 
@@ -253,6 +231,7 @@ export default function App() {
       />
       <Play 
         handleClick={handleClick}
+        playStatus={playStatus}
       />
 		</div>
 	);

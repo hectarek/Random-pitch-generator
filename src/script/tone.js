@@ -37,4 +37,8 @@ function tupleToAbsoluteTone(tuple) {
 	return `${tuple[0]}${tuple[1]}`;
 }
 
-export {generateAllTonesInRange, randToneFromRange, tupleToAbsoluteTone};
+function tempoIntoSeconds(tempo) {
+	return tempo/60
+  }
+
+export {generateAllTonesInRange, randToneFromRange, tupleToAbsoluteTone, tempoIntoSeconds};

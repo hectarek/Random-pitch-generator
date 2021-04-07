@@ -5,7 +5,7 @@ export function Play(props) {
 	return (
 		<div className="container-box">
 			<Button id="pitch-button" variant="contained" color="primary" onClick={props.handleClick}>
-				Random Pitch
+				{props.playStatus ? "Pause" : "Play"}
 			</Button>
 		</div>
 	);
