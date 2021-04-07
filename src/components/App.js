@@ -34,17 +34,17 @@ const useStyles = makeStyles({
 const instrumentsDemo = [
 	{
 		name: "MonoSynth",
-		sound: new Tone.MonoSynth().toDestination(),
+		sound: "",
 		range: [],
 	},
   {
 		name: "Synth",
-		sound: new Tone.Synth().toDestination(),
+		sound: "",
 		range: [],
 	},
   {
 		name: "MetalSynth",
-		sound: new Tone.MonoSynth().toDestination(),
+		sound: "",
 		range: [],
 	}
 ]
@@ -97,18 +97,18 @@ export default function App() {
 
   // *********************** INITIAL STATE LOGIC ***********************
 
-  let synth;
+  let synth = new Tone.FMSynth().toDestination();
 
-  // Determining which sound is chosen
-  if(instrument === instrumentsDemo[0].name["MonoSynth"]) {
-    synth = instrumentsDemo[0].sound;
-  } else if (instrument === instrumentsDemo[1].name["Synth"]) {
-    synth = instrumentsDemo[1].sound;
-  } else if (instrument === instrumentsDemo[2].name["MetalSynth"]) {
-    synth = instrumentsDemo[2].sound;
-  } else {
-    synth = instrumentsDemo[1].sound;
-  }
+  // // Determining which sound is chosen
+  // if(instrument === instrumentsDemo[0].name["MonoSynth"]) {
+  //   synth = instrumentsDemo[0].sound;
+  // } else if (instrument === instrumentsDemo[1].name["Synth"]) {
+  //   synth = instrumentsDemo[1].sound;
+  // } else if (instrument === instrumentsDemo[2].name["MetalSynth"]) {
+  //   synth = instrumentsDemo[2].sound;
+  // } else {
+  //   synth = instrumentsDemo[1].sound;
+  // }
   
   // Example of input [["E", 2],["A#", 5]];
   let randomNoteRange = generateAllTonesInRange([[rangeN1, rangeO1], [rangeN2, rangeO2]]);
@@ -119,8 +119,8 @@ export default function App() {
   // Tone.Transport.bpm.value = tempo;
 
   const loopA = new Tone.Loop(time => {
-    synth.triggerAttackRelease(randomNote, "4n", time);
-  }, "1n").start('8n');
+    synth.triggerAttackRelease("C4", "4n", time);
+  }, "2n").start(0);
 
   loopA.loop = true;
   loopA.loopEnd = "1m";
