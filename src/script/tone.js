@@ -38,7 +38,7 @@ function tupleToAbsoluteTone(tuple) {
 }
 
 function tempoIntoSeconds(tempo) {
-	return tempo/60
-  }
+	return 60/tempo;
+}
 
 export {generateAllTonesInRange, randToneFromRange, tupleToAbsoluteTone, tempoIntoSeconds};

@@ -7,7 +7,7 @@ export function Rest(props) {
 		<div className={props.styles.root}>
 			<Typography id="discrete-slider-small-steps" gutterBottom>Rest Length</Typography>
 			<Slider
-				defaultValue={3}
+				defaultValue={2}
 				onChange={props.handleChange} 
 				aria-labelledby="discrete-slider-small-steps"
 				step={1}
