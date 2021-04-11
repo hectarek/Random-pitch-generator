@@ -71,15 +71,23 @@ export default function App() {
 
   // Synth State
 
+  const [synth, setSynth] = useState(new Tone.Synth().toDestination());
   const [synthSettings, setSynthSettings] = useState({
     Synth: {
       oscillator: { type: "sine" },
     }
   });
 
+
+
   // Active State
+  
+  const [index, setIndex] = useState(0);
+  const [note, setNote] = useState("C4")
+  const [notes, setNotes] = useState(["C4", "E4", "G4"])
 
   const [playStatus, setPlayStatus] = useState(false);
+  const [time, setTime] = useState(0);
 
   // Handle Functions
   const handleInstrumentPickerChange = (event) => {setInstrument(event.target.value);};
@@ -107,39 +115,67 @@ export default function App() {
   // const gain = new Tone.Gain(0.1);
   // gain.toDestination();
 
+  const generateRandomNoteArray = () => {
+    let placeHolder = [];
+    for (let i=0; i<100; i++) {
+      placeHolder.push(randToneFromRange([[rangeN1, rangeO1], [rangeN2, rangeO2]]));
+    }
+    setNotes(placeHolder);
+  }
+
+  const playLoop = (time) => {
+    setTime(time + Tone.Transport.now());
+
+    setInterval(() => {
+      setTime(time + 1); 
+      synth.triggerAttack(note, time);
+      synth.triggerRelease(time + 0.1);
+    }, 1000);
+  }
+
+  // Initalize only
+  useEffect(() => {
+
+    // Set inital time for repeater
+    setTime(Tone.now());
+    // Gerenate Entire array of random pitches
+    generateRandomNoteArray();
+    // What note is it at the time when index changes
+    setNote(notes[index % notes.length]);
+
+    playLoop(time);
+
+    // Tone.Transport.scheduleRepeat(ticker => {
+    //   setTime(ticker);
+    //   synth.triggerAttack(note, ticker);
+    //   synth.triggerRelease(ticker + 0.1);
+    // }, 1);
+  }, [])
+
+  useEffect(() => {
+    setIndex(index + 1);
+    setNote(notes[index % notes.length]);
+    console.log(note)
+  }, [time])
+
+  useEffect(() => {
+    Tone.Transport.bpm.value = tempo;
+  },[tempo])
+
+
   // *********************** END INITIAL STATE LOGIC ***********************
 
 
   // *********************** PLAY BUTTON LOGIC ***********************
 
   const handleClick = async () => {
-    const synth = new Tone.Synth().toDestination();
-
-    const notes = [
-      "C4", "E4", "G4"
-    ]
-    let index = 0;
-  
-    Tone.Transport.scheduleRepeat(time => {
-      console.log(time);
-      repeat(time);
-    }, "8n");
-    
-    Tone.Transport.bpm.value = tempo;
-  
-    const repeat = time => {
-      let note = notes[index % notes.length];
-      synth.triggerAttackRelease(note, "8n", time);
-      index++;
-    }  
-
     if(!playStatus) {
       setPlayStatus(true);
       await Tone.start();
       await Tone.Transport.start();
     } else {
       await Tone.Transport.stop();
-      await synth.dispose();
+      // await synth.dispose();
       setPlayStatus(false);
     }
   };
