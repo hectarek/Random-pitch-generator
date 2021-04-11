@@ -11,7 +11,7 @@ export function Length(props) {
 				onChange={props.handleChange} 
 				aria-labelledby="discrete-slider-small-steps"
 				step={1}
-				valueLabelDisplay="auto "
+				valueLabelDisplay="auto"
 				marks
 				min={1}
 				max={10}

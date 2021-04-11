@@ -21,6 +21,7 @@ import keys from '../script/keys';
 import scales from '../script/scales';
 import octaves from '../script/octaves';
 import {generateAllTonesInRange, randToneFromRange, tempoIntoSeconds} from '../script/tone';
+import { connectSignal } from 'tone';
 
 // Note Lengths
 
@@ -56,9 +57,6 @@ export default function App() {
   const [rangeN2, setRangeN2] = useState("C");
   const [rangeO2, setRangeO2] = useState(5);
 
-  const [minRange, setMinRange] = useState("");
-  const [maxRange, setMaxRange] = useState("");
-
   const [scale, setScale] = useState("");
   const [key, setKey] = useState("");
 
@@ -71,9 +69,15 @@ export default function App() {
   const [rest, setRest] = useState(2);
   const [tempo, setTempo] = useState(60);
 
-  // Active State
+  // Synth State
 
-  const [tones, setTones] = useState([]);
+  const [synthSettings, setSynthSettings] = useState({
+    Synth: {
+      oscillator: { type: "sine" },
+    }
+  });
+
+  // Active State
 
   const [playStatus, setPlayStatus] = useState(false);
 
@@ -90,7 +94,6 @@ export default function App() {
   const handleRestSliderChange = (event, newValue) => {setRest(newValue);};
   const handleTempoSliderChange = (event, newValue) => {setTempo(newValue);};
 
-
   // *********************** INITIAL STATE LOGIC ***********************
 
   // Example of input [["E", 2],["A#", 5]];
@@ -100,31 +103,9 @@ export default function App() {
   let lengthOfToneSustain = Math.floor(timeInSeconds * length);
   let totalTime = Math.floor((timeInSeconds * rest) + lengthOfToneSustain);
 
-  let notes = ["C4", "E4", "G4", "Bb4", "D5"]
-  let index = 0;
-
-  let synth = new Tone.Synth().toDestination();
-  synth.oscillator.type = "sine";
-  const gain = new Tone.Gain(0.1);
-  gain.toDestination();
-  synth.connect(gain);
-
-  Tone.Transport.scheduleRepeat(time => {
-    // synth.start(time).stop(time + 0.5);
-    repeat(time);
-  }, "4n");
-  
-  Tone.Transport.bpm.value = tempo;
-
-  const repeat = time => {
-    let note = notes[index % notes.length]
-    synth.triggerAttackRelease(note, "4n", time);
-    index++;
-  }
-
-  useEffect(() => {
-
-  })
+  // synth.oscillator.type = "sine";
+  // const gain = new Tone.Gain(0.1);
+  // gain.toDestination();
 
   // *********************** END INITIAL STATE LOGIC ***********************
 
@@ -132,20 +113,33 @@ export default function App() {
   // *********************** PLAY BUTTON LOGIC ***********************
 
   const handleClick = async () => {
+    const synth = new Tone.Synth().toDestination();
 
-    console.log(randomNoteRange);
-    console.log(randomNote);
+    const notes = [
+      "C4", "E4", "G4"
+    ]
+    let index = 0;
   
-    console.log("length of tone:",lengthOfToneSustain);
-    console.log("length of rest:", totalTime);
+    Tone.Transport.scheduleRepeat(time => {
+      console.log(time);
+      repeat(time);
+    }, "8n");
+    
+    Tone.Transport.bpm.value = tempo;
+  
+    const repeat = time => {
+      let note = notes[index % notes.length];
+      synth.triggerAttackRelease(note, "8n", time);
+      index++;
+    }  
 
     if(!playStatus) {
-      await Tone.Transport.start();
       setPlayStatus(true);
-      console.log(synth)
+      await Tone.start();
+      await Tone.Transport.start();
     } else {
       await Tone.Transport.stop();
-      await Tone.Transport.clear();
+      await synth.dispose();
       setPlayStatus(false);
     }
   };
