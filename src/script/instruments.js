@@ -1,5 +1,7 @@
 // INSTRUMENTS
 
+import * as Tone from 'tone';
+
 // Basic elements of an instrument:
 
 // instrument: {
@@ -9,7 +11,138 @@
 //     type: ""
 // }
 
-const instruments = [
+export const sampler = new Tone.Sampler({
+	urls: {
+		A0: "a0.mp3",
+		C1: "c1.mp3",
+		"D#1": "ds1.mp3",
+		"F#1": "fs1.mp3",
+		A1: "a1.mp3",
+		C2: "c2.mp3",
+		"D#2": "ds2.mp3",
+		"F#2": "fs2.mp3",
+		A2: "a2.mp3",
+		C3: "c3.mp3",
+		"D#3": "ds3.mp3",
+		"F#3": "fs3.mp3",
+		A3: "a3.mp3",
+		C4: "c4.mp3",
+		"D#4": "ds4.mp3",
+		"F#4": "fs4.mp3",
+		A4: "a4.mp3",
+		C5: "c5.mp3",
+		"D#5": "ds5.mp3",
+		"F#5": "fs5.mp3",
+		A5: "a5.mp3",
+		C6: "c6.mp3",
+		"D#6": "ds6.mp3",
+		"F#6": "fs6.mp3",
+		A6: "a6.mp3",
+		C7: "c7.mp3",
+		"D#7": "ds7.mp3",
+		"F#7": "fs7.mp3",
+		A7: "a7.mp3",
+		C8: "c8.mp3"
+	},
+	baseUrl: "https://ledlamp.github.io/piano-sounds/GreatAndSoftPiano/"
+}).toDestination();
+
+export const pianoNotesKey = {
+    "name": "PianoSounds",
+    "keys": [
+        "a-1",
+        "as-1",
+        "b-1",
+        "c0",
+        "cs0",
+        "d0",
+        "ds0",
+        "e0",
+        "f0",
+        "fs0",
+        "g0",
+        "gs0",
+        "a0",
+        "as0",
+        "b0",
+        "c1",
+        "cs1",
+        "d1",
+        "ds1",
+        "e1",
+        "f1",
+        "fs1",
+        "g1",
+        "gs1",
+        "a1",
+        "as1",
+        "b1",
+        "c2",
+        "cs2",
+        "d2",
+        "ds2",
+        "e2",
+        "f2",
+        "fs2",
+        "g2",
+        "gs2",
+        "a2",
+        "as2",
+        "b2",
+        "c3",
+        "cs3",
+        "d3",
+        "ds3",
+        "e3",
+        "f3",
+        "fs3",
+        "g3",
+        "gs3",
+        "a3",
+        "as3",
+        "b3",
+        "c4",
+        "cs4",
+        "d4",
+        "ds4",
+        "e4",
+        "f4",
+        "fs4",
+        "g4",
+        "gs4",
+        "a4",
+        "as4",
+        "b4",
+        "c5",
+        "cs5",
+        "d5",
+        "ds5",
+        "e5",
+        "f5",
+        "fs5",
+        "g5",
+        "gs5",
+        "a5",
+        "as5",
+        "b5",
+        "c6",
+        "cs6",
+        "d6",
+        "ds6",
+        "e6",
+        "f6",
+        "fs6",
+        "g6",
+        "gs6",
+        "a6",
+        "as6",
+        "b6",
+        "c7"
+    ],
+    "ext": ".mp3"
+}
+
+export const instruments = [
 	{
 		name: "Baritone",
 		sound: "",
@@ -228,4 +361,4 @@ const instruments = [
 	},
 ];
 
-export default instruments;
+export default {sampler, pianoNotesKey, instruments};

@@ -16,7 +16,7 @@ import { makeStyles } from '@material-ui/core/styles';
 
 // Logic Imports
 import * as Tone from 'tone';
-import instruments from '../script/instruments';
+import {sampler, pianoNotesKey, instruments} from '../script/instruments';
 import keys from '../script/keys';
 import scales from '../script/scales';
 import octaves from '../script/octaves';
@@ -31,12 +31,7 @@ const useStyles = makeStyles({
 
 const instrumentsDemo = [
   {
-		name: "Synth",
-		sound: "",
-		range: [],
-	},
-  {
-		name: "MetalSynth",
+		name: "Piano",
 		sound: "",
 		range: [],
 	}
@@ -47,7 +42,7 @@ export default function App() {
   const classes = useStyles();
 
   // Setting State of Input Field Values
-  const [instrument, setInstrument] = useState("Synth");
+  const [instrument, setInstrument] = useState("Piano");
 
   const [rangeN1, setRangeN1] = useState("C");
   const [rangeO1, setRangeO1] = useState(3);
@@ -82,10 +77,15 @@ export default function App() {
     return placeHolder;
   }
   
+  const [currentNote, setCurrentNote] = useState("wait")
   const [notes, setNotes] = useState(generateRandomNoteArray())
 
    // Setting Synth State
-   const [synth, setSynth] = useState(new Tone.Synth().toDestination());
+  //  const [synth, setSynth] = useState(new Tone.Synth().toDestination());
+
+   const [synth, setSynth] = useState(sampler.toDestination());
+
+
    const [synthSettings, setSynthSettings] = useState({
     Synth: {
       oscillator: { type: "sine" },
@@ -95,6 +95,7 @@ export default function App() {
   // Setting State for Sequencer
    const [sequencer, setSequencer] = useState(new Tone.Sequence((time, note) => {
      synth.triggerAttackRelease(note, lengthInSecs, time)
+     setCurrentNote(note);
    }, notes, total));
  
   // Handle Functions
@@ -226,6 +227,10 @@ export default function App() {
           check={switches.drone}
           name={"drone"}
           />
+
+          <div>
+            <h1>{currentNote}</h1>
+          </div>
       </div>  
       
       <Headings text={"LENGTH"}/>
