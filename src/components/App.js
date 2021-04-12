@@ -21,9 +21,6 @@ import keys from '../script/keys';
 import scales from '../script/scales';
 import octaves from '../script/octaves';
 import {generateAllTonesInRange, randToneFromRange, tempoIntoSeconds} from '../script/tone';
-import { connectSignal } from 'tone';
-
-// Note Lengths
 
 // useStyles 
 const useStyles = makeStyles({
@@ -49,7 +46,7 @@ export default function App() {
 
   const classes = useStyles();
 
-  // Setting Application State
+  // Setting State of Input Field Values
   const [instrument, setInstrument] = useState("Synth");
 
   const [rangeN1, setRangeN1] = useState("C");
@@ -61,18 +58,22 @@ export default function App() {
   const [key, setKey] = useState("");
 
   const [switches, setSwitches] = useState({
-    drone: true,
-    octaveLimit: true,
+    drone: false,
+    octaveLimit: false,
   });
 
   const [length, setLength] = useState(2);
   const [rest, setRest] = useState(2);
-  const [total, setTotal] = useState(length + rest);
-  const [tempo, setTempo] = useState(60);
+  const [tempo, setTempo] = useState(120);
+  const [playStatus, setPlayStatus] = useState(false);
 
- 
-  // Active State
+  // Setting State of Calculated Values
+  const [tempoInSecs, setTempoInSecs] = useState(tempoIntoSeconds(tempo))
+  const [lengthInSecs, setLengthInSecs] = useState(length * tempoInSecs);
+  const [restInSecs, setRestInSecs] = useState(rest * tempoInSecs);
+  const [total, setTotal] = useState(lengthInSecs + restInSecs);
 
+  // Generating Note Array for Sequencer
   const generateRandomNoteArray = () => {
     let placeHolder = [];
     for (let i=0; i<100; i++) {
@@ -83,22 +84,19 @@ export default function App() {
   
   const [notes, setNotes] = useState(generateRandomNoteArray())
 
-  const [playStatus, setPlayStatus] = useState(false);
-
-   // Synth State
-
+   // Setting Synth State
    const [synth, setSynth] = useState(new Tone.Synth().toDestination());
+   const [synthSettings, setSynthSettings] = useState({
+    Synth: {
+      oscillator: { type: "sine" },
+    }
+  });
+
+  // Setting State for Sequencer
    const [sequencer, setSequencer] = useState(new Tone.Sequence((time, note) => {
-     synth.triggerAttackRelease(note, length, time)
+     synth.triggerAttackRelease(note, lengthInSecs, time)
    }, notes, total));
  
-   const [synthSettings, setSynthSettings] = useState({
-     Synth: {
-       oscillator: { type: "sine" },
-     }
-   });
- 
-
   // Handle Functions
   const handleInstrumentPickerChange = (event) => {setInstrument(event.target.value);};
   const handleRangeN1PickerChange = (event) => {setRangeN1(event.target.value);};
@@ -114,26 +112,24 @@ export default function App() {
 
   // *********************** INITIAL STATE LOGIC ***********************
 
-  // Example of input [["E", 2],["A#", 5]];
-  let randomNoteRange = generateAllTonesInRange([[rangeN1, rangeO1], [rangeN2, rangeO2]]);
-  let randomNote = randToneFromRange([[rangeN1, rangeO1], [rangeN2, rangeO2]]);
-  // let timeInSeconds = tempoIntoSeconds(tempo);
-  // let lengthOfToneSustain = Math.floor(timeInSeconds * length);
-  // let totalTime = Math.floor((timeInSeconds * rest) + lengthOfToneSustain);
+  // Resetting the notes range of notes
+  useEffect(() => {
+    setNotes(generateRandomNoteArray());
+  }, [rangeN1, rangeO1, rangeN2, rangeO2])
 
-  // Initalize only
+  // Recalculating Tempo and Length Logic
   useEffect(() => { 
-
-  }, [])
+    setTempoInSecs(tempoIntoSeconds(tempo));
+  }, [tempo]);
 
   useEffect(() => {
-    let timeInSeconds = tempoIntoSeconds(tempo);
+    setLengthInSecs(length * tempoInSecs);
+    setRestInSecs(rest * tempoInSecs);
+  },[length, rest, tempo]);
 
-   setLength(length * timeInSeconds);
-   setRest(rest * timeInSeconds);
-   setTotal(length + rest);
-
-  },[length, rest, tempo])
+  useEffect(() => {
+    setTotal(lengthInSecs + restInSecs);
+  }, [lengthInSecs, restInSecs]);
 
   // *********************** END INITIAL STATE LOGIC ***********************
 
@@ -146,18 +142,25 @@ export default function App() {
 
     if(playStatus) {
       setPlayStatus(false);
-      await Tone.Transport.stop();
-      await sequencer.stop();
+      Tone.Transport.stop();
+      sequencer.stop();
+      sequencer.clear();
+
+      // Need to find a better place to put this
       setNotes(generateRandomNoteArray());
       setSequencer(new Tone.Sequence((time, note) => {
-        synth.triggerAttackRelease(note, length, time)
+        synth.triggerAttackRelease(note, lengthInSecs, time)
       }, notes, total))
+      // Move this here ^
+
       return;
+    } else {
+      
     }
 
     setPlayStatus(true);
-    await sequencer.start();
-    await Tone.Transport.start("+0.25");
+    sequencer.start();
+    Tone.Transport.start("+0.25");
   };
 
  // *********************** PLAY BUTTON LOGIC END ***********************

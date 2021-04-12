@@ -7,7 +7,7 @@ export function Tempo(props) {
 		<div className={props.styles.root}>
 			<Typography id="tempo-markings" gutterBottom>Tempo</Typography>
 			<Slider
-				defaultValue={60}
+				defaultValue={120}
 				onChange={props.handleChange} 
 				aria-labelledby="tempo-markings"
 				step={1}
