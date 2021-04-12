@@ -69,25 +69,36 @@ export default function App() {
   const [rest, setRest] = useState(2);
   const [tempo, setTempo] = useState(60);
 
-  // Synth State
-
-  const [synth, setSynth] = useState(new Tone.Synth().toDestination());
-  const [synthSettings, setSynthSettings] = useState({
-    Synth: {
-      oscillator: { type: "sine" },
-    }
-  });
-
-
-
+ 
   // Active State
+
+  const generateRandomNoteArray = () => {
+    let placeHolder = [];
+    for (let i=0; i<100; i++) {
+      placeHolder.push(randToneFromRange([[rangeN1, rangeO1], [rangeN2, rangeO2]]));
+    }
+    return placeHolder;
+  }
   
-  const [index, setIndex] = useState(0);
-  const [note, setNote] = useState("C4")
-  const [notes, setNotes] = useState(["C4", "E4", "G4"])
+  const [notes, setNotes] = useState(generateRandomNoteArray())
 
   const [playStatus, setPlayStatus] = useState(false);
   const [time, setTime] = useState(0);
+
+   // Synth State
+
+   const [synth, setSynth] = useState(new Tone.Synth().toDestination());
+   const [sequencer, setSequencer] = useState(new Tone.Sequence((ticker, note) => {
+     setTime(ticker);
+     synth.triggerAttackRelease(note, 0.2, ticker)
+   }, notes, 1));
+ 
+   const [synthSettings, setSynthSettings] = useState({
+     Synth: {
+       oscillator: { type: "sine" },
+     }
+   });
+ 
 
   // Handle Functions
   const handleInstrumentPickerChange = (event) => {setInstrument(event.target.value);};
@@ -111,57 +122,21 @@ export default function App() {
   let lengthOfToneSustain = Math.floor(timeInSeconds * length);
   let totalTime = Math.floor((timeInSeconds * rest) + lengthOfToneSustain);
 
-  // synth.oscillator.type = "sine";
-  // const gain = new Tone.Gain(0.1);
-  // gain.toDestination();
+  // // Initalize only
+  // useEffect(() => {
+  //   // Set inital time for repeater
+  //   setTime(Tone.now());
 
-  const generateRandomNoteArray = () => {
-    let placeHolder = [];
-    for (let i=0; i<100; i++) {
-      placeHolder.push(randToneFromRange([[rangeN1, rangeO1], [rangeN2, rangeO2]]));
-    }
-    setNotes(placeHolder);
-  }
+  //   Tone.Transport.bpm.value = tempo;
+  // }, [])
 
-  const playLoop = (time) => {
-    setTime(time + Tone.Transport.now());
+  // useEffect(() => {
 
-    setInterval(() => {
-      setTime(time + 1); 
-      synth.triggerAttack(note, time);
-      synth.triggerRelease(time + 0.1);
-    }, 1000);
-  }
+  // }, [time])
 
-  // Initalize only
-  useEffect(() => {
-
-    // Set inital time for repeater
-    setTime(Tone.now());
-    // Gerenate Entire array of random pitches
-    generateRandomNoteArray();
-    // What note is it at the time when index changes
-    setNote(notes[index % notes.length]);
-
-    playLoop(time);
-
-    // Tone.Transport.scheduleRepeat(ticker => {
-    //   setTime(ticker);
-    //   synth.triggerAttack(note, ticker);
-    //   synth.triggerRelease(ticker + 0.1);
-    // }, 1);
-  }, [])
-
-  useEffect(() => {
-    setIndex(index + 1);
-    setNote(notes[index % notes.length]);
-    console.log(note)
-  }, [time])
-
-  useEffect(() => {
-    Tone.Transport.bpm.value = tempo;
-  },[tempo])
-
+  // useEffect(() => {
+  //   Tone.Transport.bpm.value = tempo;
+  // },[tempo])
 
   // *********************** END INITIAL STATE LOGIC ***********************
 
@@ -169,15 +144,31 @@ export default function App() {
   // *********************** PLAY BUTTON LOGIC ***********************
 
   const handleClick = async () => {
-    if(!playStatus) {
-      setPlayStatus(true);
-      await Tone.start();
-      await Tone.Transport.start();
-    } else {
-      await Tone.Transport.stop();
-      // await synth.dispose();
+
+    await Tone.start();
+
+    // const sequence = new Tone.Sequence((ticker, note) => {
+    //   setTime(ticker);
+    //   synth.triggerAttackRelease(note, 0.2, ticker)
+    // }, notes, 1)
+   
+    if(playStatus) {
       setPlayStatus(false);
+      await Tone.Transport.stop();
+      await sequencer.stop();
+      // await sequencer.clear();
+      // await sequencer.dispose();
+      setNotes(generateRandomNoteArray());
+      setSequencer(new Tone.Sequence((ticker, note) => {
+        setTime(ticker);
+        synth.triggerAttackRelease(note, 0.2, ticker)
+      }, notes, 1))
+      return;
     }
+
+    setPlayStatus(true);
+    await sequencer.start();
+    await Tone.Transport.start("+0.25");
   };
 
  // *********************** PLAY BUTTON LOGIC END ***********************
