@@ -67,6 +67,7 @@ export default function App() {
 
   const [length, setLength] = useState(2);
   const [rest, setRest] = useState(2);
+  const [total, setTotal] = useState(length + rest);
   const [tempo, setTempo] = useState(60);
 
  
@@ -83,15 +84,13 @@ export default function App() {
   const [notes, setNotes] = useState(generateRandomNoteArray())
 
   const [playStatus, setPlayStatus] = useState(false);
-  const [time, setTime] = useState(0);
 
    // Synth State
 
    const [synth, setSynth] = useState(new Tone.Synth().toDestination());
-   const [sequencer, setSequencer] = useState(new Tone.Sequence((ticker, note) => {
-     setTime(ticker);
-     synth.triggerAttackRelease(note, 0.2, ticker)
-   }, notes, 1));
+   const [sequencer, setSequencer] = useState(new Tone.Sequence((time, note) => {
+     synth.triggerAttackRelease(note, length, time)
+   }, notes, total));
  
    const [synthSettings, setSynthSettings] = useState({
      Synth: {
@@ -118,25 +117,23 @@ export default function App() {
   // Example of input [["E", 2],["A#", 5]];
   let randomNoteRange = generateAllTonesInRange([[rangeN1, rangeO1], [rangeN2, rangeO2]]);
   let randomNote = randToneFromRange([[rangeN1, rangeO1], [rangeN2, rangeO2]]);
-  let timeInSeconds = tempoIntoSeconds(tempo);
-  let lengthOfToneSustain = Math.floor(timeInSeconds * length);
-  let totalTime = Math.floor((timeInSeconds * rest) + lengthOfToneSustain);
+  // let timeInSeconds = tempoIntoSeconds(tempo);
+  // let lengthOfToneSustain = Math.floor(timeInSeconds * length);
+  // let totalTime = Math.floor((timeInSeconds * rest) + lengthOfToneSustain);
 
-  // // Initalize only
-  // useEffect(() => {
-  //   // Set inital time for repeater
-  //   setTime(Tone.now());
+  // Initalize only
+  useEffect(() => { 
 
-  //   Tone.Transport.bpm.value = tempo;
-  // }, [])
+  }, [])
 
-  // useEffect(() => {
+  useEffect(() => {
+    let timeInSeconds = tempoIntoSeconds(tempo);
 
-  // }, [time])
+   setLength(length * timeInSeconds);
+   setRest(rest * timeInSeconds);
+   setTotal(length + rest);
 
-  // useEffect(() => {
-  //   Tone.Transport.bpm.value = tempo;
-  // },[tempo])
+  },[length, rest, tempo])
 
   // *********************** END INITIAL STATE LOGIC ***********************
 
@@ -147,22 +144,14 @@ export default function App() {
 
     await Tone.start();
 
-    // const sequence = new Tone.Sequence((ticker, note) => {
-    //   setTime(ticker);
-    //   synth.triggerAttackRelease(note, 0.2, ticker)
-    // }, notes, 1)
-   
     if(playStatus) {
       setPlayStatus(false);
       await Tone.Transport.stop();
       await sequencer.stop();
-      // await sequencer.clear();
-      // await sequencer.dispose();
       setNotes(generateRandomNoteArray());
-      setSequencer(new Tone.Sequence((ticker, note) => {
-        setTime(ticker);
-        synth.triggerAttackRelease(note, 0.2, ticker)
-      }, notes, 1))
+      setSequencer(new Tone.Sequence((time, note) => {
+        synth.triggerAttackRelease(note, length, time)
+      }, notes, total))
       return;
     }
 
