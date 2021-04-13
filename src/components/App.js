@@ -18,7 +18,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import * as Tone from 'tone';
 import {sampler, pianoNotesKey, instruments} from '../script/instruments';
 import keys from '../script/keys';
-import scales from '../script/scales';
+import {createScale, generateAllNotes, scales} from '../script/scales';
 import octaves from '../script/octaves';
 import {generateAllTonesInRange, randToneFromRange, tempoIntoSeconds} from '../script/tone';
 
@@ -49,8 +49,8 @@ export default function App() {
   const [rangeN2, setRangeN2] = useState("C");
   const [rangeO2, setRangeO2] = useState(5);
 
-  const [scale, setScale] = useState("");
-  const [key, setKey] = useState("");
+  const [scale, setScale] = useState("Chromatic");
+  const [key, setKey] = useState("C");
 
   const [switches, setSwitches] = useState({
     drone: false,
@@ -71,9 +71,14 @@ export default function App() {
   // Generating Note Array for Sequencer
   const generateRandomNoteArray = () => {
     let placeHolder = [];
-    for (let i=0; i<100; i++) {
+    for (let i=0; i<30; i++) {
       placeHolder.push(randToneFromRange([[rangeN1, rangeO1], [rangeN2, rangeO2]]));
     }
+    let filter = generateAllNotes(scale, key);
+    console.log("FILTER ARRAY ", filter);
+    // Filter not working quite right
+    let newplace = placeHolder.filter(note => filter.includes(note));
+    console.log("PLACEHOLDER ARRAY ", newplace);
     return placeHolder;
   }
   
@@ -116,7 +121,7 @@ export default function App() {
   // Resetting the notes range of notes
   useEffect(() => {
     setNotes(generateRandomNoteArray());
-  }, [rangeN1, rangeO1, rangeN2, rangeO2])
+  }, [rangeN1, rangeO1, rangeN2, rangeO2, scale, key])
 
   // Recalculating Tempo and Length Logic
   useEffect(() => { 
@@ -168,7 +173,7 @@ export default function App() {
 
 	return (
 		<div className="container">
-			<Title text={"Random Pitch Generator"}/>
+			<Title text={"Noteworthy.music"}/>
       <Headings text={"INSTRUMENT"}/>
       <div className="range-container">
         <Picker 
