@@ -9,7 +9,12 @@
 - Spits out random pitches (Done)
 - Has adjustable range (Done, needs error checking)
 - Has adjustable note sustain (Done)
-- Has adjustable rest sustain (TODO)
-- Has adjustable tempo (w/ click) (TODO)
-- Note name visual toggle (C) (TODO)
+- Has adjustable rest sustain (Done)
+- Has adjustable tempo (w/ click) (Done)
+- Note name visual toggle (C) (Done)
 
+
+## Know Issues:
+
+- Will error out if you try to do upper range that is lower than low range. 
+- When you set the sequencer before you play, it doesn't update the notes right away. 

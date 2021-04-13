@@ -22,11 +22,11 @@ const octaves = [
 	{
 		name: 6,
 	},
-	{
-		name: 7,
-	},
-	{
-		name: 8,
-	},
+	// {
+	// 	name: 7,
+	// },
+	// {
+	// 	name: 8,
+	// },
 ];
 export default octaves;

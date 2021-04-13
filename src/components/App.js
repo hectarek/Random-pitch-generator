@@ -16,11 +16,11 @@ import { makeStyles } from '@material-ui/core/styles';
 
 // Logic Imports
 import * as Tone from 'tone';
-import {sampler, pianoNotesKey, instruments} from '../script/instruments';
+import {sampler} from '../script/instruments';
 import keys from '../script/keys';
-import {createScale, generateAllNotes, scales} from '../script/scales';
+import {generateAllNotes, scales} from '../script/scales';
 import octaves from '../script/octaves';
-import {generateAllTonesInRange, randToneFromRange, tempoIntoSeconds} from '../script/tone';
+import {randToneFromRange, tempoIntoSeconds} from '../script/tone';
 
 // useStyles 
 const useStyles = makeStyles({
@@ -71,15 +71,12 @@ export default function App() {
   // Generating Note Array for Sequencer
   const generateRandomNoteArray = () => {
     let placeHolder = [];
-    for (let i=0; i<30; i++) {
+    for (let i=0; i<100; i++) {
       placeHolder.push(randToneFromRange([[rangeN1, rangeO1], [rangeN2, rangeO2]]));
     }
     let filter = generateAllNotes(scale, key);
-    console.log("FILTER ARRAY ", filter);
-    // Filter not working quite right
-    let newplace = placeHolder.filter(note => filter.includes(note));
-    console.log("PLACEHOLDER ARRAY ", newplace);
-    return placeHolder;
+    let arr = placeHolder.filter(note => filter.includes(note));
+    return arr;
   }
   
   const [currentNote, setCurrentNote] = useState("wait")
@@ -90,18 +87,25 @@ export default function App() {
 
    const [synth, setSynth] = useState(sampler.toDestination());
 
-
-   const [synthSettings, setSynthSettings] = useState({
-    Synth: {
-      oscillator: { type: "sine" },
-    }
-  });
+  //  const [synthSettings, setSynthSettings] = useState({
+  //   Synth: {
+  //     oscillator: { type: "sine" },
+  //   }
+  // });
 
   // Setting State for Sequencer
    const [sequencer, setSequencer] = useState(new Tone.Sequence((time, note) => {
      synth.triggerAttackRelease(note, lengthInSecs, time)
      setCurrentNote(note);
    }, notes, total));
+
+   const generateNewSequencer = () => {
+    setNotes(generateRandomNoteArray());
+    setSequencer(new Tone.Sequence((time, note) => {
+      synth.triggerAttackRelease(note, lengthInSecs, time)
+      setCurrentNote(note);
+    }, notes, total))
+   }
  
   // Handle Functions
   const handleInstrumentPickerChange = (event) => {setInstrument(event.target.value);};
@@ -119,9 +123,9 @@ export default function App() {
   // *********************** INITIAL STATE LOGIC ***********************
 
   // Resetting the notes range of notes
-  useEffect(() => {
-    setNotes(generateRandomNoteArray());
-  }, [rangeN1, rangeO1, rangeN2, rangeO2, scale, key])
+  // useEffect(() => {
+
+  // }, [rangeN1, rangeO1, rangeN2, rangeO2, scale, key])
 
   // Recalculating Tempo and Length Logic
   useEffect(() => { 
@@ -146,27 +150,22 @@ export default function App() {
 
     await Tone.start();
 
-    if(playStatus) {
+    if(!playStatus) {
+      // When you click "PLAY"
+      setPlayStatus(true);
+      sequencer.start();
+      Tone.Transport.start("+0.25");
+      return;
+    } else {
+      // When you click "PAUSE"
       setPlayStatus(false);
       Tone.Transport.stop();
       sequencer.stop();
       sequencer.clear();
-
-      // Need to find a better place to put this
-      setNotes(generateRandomNoteArray());
-      setSequencer(new Tone.Sequence((time, note) => {
-        synth.triggerAttackRelease(note, lengthInSecs, time)
-      }, notes, total))
-      // Move this here ^
-
+      generateNewSequencer();
       return;
-    } else {
-      
     }
 
-    setPlayStatus(true);
-    sequencer.start();
-    Tone.Transport.start("+0.25");
   };
 
  // *********************** PLAY BUTTON LOGIC END ***********************

@@ -38,16 +38,16 @@ export const sampler = new Tone.Sampler({
 		"D#6": "ds6.mp3",
 		"F#6": "fs6.mp3",
 		A6: "a6.mp3",
-		C7: "c7.mp3",
-		"D#7": "ds7.mp3",
-		"F#7": "fs7.mp3",
-		A7: "a7.mp3",
-		C8: "c8.mp3"
+		// C7: "c7.mp3",
+		// "D#7": "ds7.mp3",
+		// "F#7": "fs7.mp3",
+		// A7: "a7.mp3",
+		// C8: "c8.mp3"
 	},
 	baseUrl: "https://ledlamp.github.io/piano-sounds/GreatAndSoftPiano/"
 }).toDestination();
 
-export const pianoNotesKey = {
+const pianoNotesKey = {
 	"name": "PianoSounds",
 	"keys": [
 		"a-1",
@@ -361,4 +361,4 @@ export const instruments = [
 	},
 ];
 
-export default { sampler, pianoNotesKey, instruments };
+export default { sampler, instruments };
