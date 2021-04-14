@@ -1,4 +1,4 @@
-import { React, useState, useEffect } from 'react';
+import { React, useState, useEffect, useRef } from 'react';
 import "../style/App.css";
 
 // Component Imports 
@@ -19,8 +19,9 @@ import * as Tone from 'tone';
 import {sampler} from '../script/instruments';
 import keys from '../script/keys';
 import {generateAllNotes, scales} from '../script/scales';
+import {allNotesInOrder, rangeForSlider} from '../script/range';
 import octaves from '../script/octaves';
-import {randToneFromRange, tempoIntoSeconds} from '../script/tone';
+import {randToneFromRange, tupleToAbsoluteTone, tempoIntoSeconds} from '../script/tone';
 
 // useStyles 
 const useStyles = makeStyles({
@@ -49,6 +50,12 @@ export default function App() {
   const [rangeN2, setRangeN2] = useState("C");
   const [rangeO2, setRangeO2] = useState(5);
 
+  //Previous Values of range
+  const prevRangeN1 = useRef("C");
+  const prevRangeO1 = useRef(3);
+  const prevRangeN2 = useRef("C");
+  const prevRangeO2 = useRef(5);
+
   const [scale, setScale] = useState("Chromatic");
   const [key, setKey] = useState("C");
 
@@ -67,6 +74,24 @@ export default function App() {
   const [lengthInSecs, setLengthInSecs] = useState(length * tempoInSecs);
   const [restInSecs, setRestInSecs] = useState(rest * tempoInSecs);
   const [total, setTotal] = useState(lengthInSecs + restInSecs);
+
+  // Error Checking on Range Fields
+
+  const errorCheckRange = () => {
+    // Logic to check to see if range is overlapping and fix
+    let minRang = tupleToAbsoluteTone([rangeN1, rangeO1]);
+    let maxRang = tupleToAbsoluteTone([rangeN2, rangeO2]);
+     
+    if (allNotesInOrder.indexOf(minRang) > allNotesInOrder.indexOf(maxRang)) {
+      setRangeN2(rangeN1);
+      setRangeO2(rangeO1);
+      setRangeN1(prevRangeN2.current);
+      setRangeO1(prevRangeO2.current);
+    }
+    console.log("This ", allNotesInOrder.indexOf(minRang), "should be shorter than");
+    console.log("this ", allNotesInOrder.indexOf(maxRang));
+
+  }
 
   // Generating Note Array for Sequencer
   const generateRandomNoteArray = () => {
@@ -123,9 +148,29 @@ export default function App() {
   // *********************** INITIAL STATE LOGIC ***********************
 
   // Resetting the notes range of notes
-  // useEffect(() => {
+  useEffect(() => {
+    prevRangeN1.current = rangeN1;
+    errorCheckRange();
+    setNotes(generateRandomNoteArray());
+  }, [rangeN1])
 
-  // }, [rangeN1, rangeO1, rangeN2, rangeO2, scale, key])
+  useEffect(() => {
+    prevRangeO1.current = rangeO1;
+    errorCheckRange();
+    setNotes(generateRandomNoteArray());
+  }, [rangeO1])
+
+  useEffect(() => {
+    prevRangeN2.current = rangeN2;
+    errorCheckRange();
+    setNotes(generateRandomNoteArray());
+  }, [rangeN2])
+
+  useEffect(() => {
+    prevRangeO2.current = rangeO2;
+    errorCheckRange();
+    setNotes(generateRandomNoteArray());
+  }, [rangeO2])
 
   // Recalculating Tempo and Length Logic
   useEffect(() => { 

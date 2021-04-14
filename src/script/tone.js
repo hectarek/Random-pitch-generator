@@ -1,9 +1,10 @@
 //Logic for Tone JS
 
-const relativeTones = ["A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#"];
-// const range = [["E", 2],["A#", 5]];
-
 function generateAllTonesInRange(rng) {
+
+	const relativeTones = ["A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#"];
+	// const range = [["E", 2],["A#", 5]];
+
 	const minTone = rng[0];
 	const maxTone = rng[1];
 
