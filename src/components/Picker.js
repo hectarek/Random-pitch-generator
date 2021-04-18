@@ -17,7 +17,7 @@ export function Picker(props) {
       >
       {props.list.map((option) => (
         <MenuItem key={option.name} value={option.name}>
-          {option.name}
+          {option.displayName ? option.displayName : option.name}
         </MenuItem>
       ))}
       </TextField>

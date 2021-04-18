@@ -6,18 +6,14 @@ const keys = [
 	},
 	{
 		name: "C#",
-	},
-	{
-		name: "Db",
+		displayName: "C#/Db"
 	},
 	{
 		name: "D",
 	},
 	{
 		name: "D#",
-	},
-	{
-		name: "Eb",
+		displayName: "D#/Eb"
 	},
 	{
 		name: "E",
@@ -27,27 +23,21 @@ const keys = [
 	},
 	{
 		name: "F#",
-	},
-	{
-		name: "Gb",
+		displayName: "F#/Gb"
 	},
 	{
 		name: "G",
 	},
 	{
 		name: "G#",
-	},
-	{
-		name: "Ab",
+		displayName: "G#/Ab"
 	},
 	{
 		name: "A",
 	},
 	{
 		name: "A#",
-	},
-	{
-		name: "Bb",
+		displayName: "A#/Bb"
 	},
 	{
 		name: "B",

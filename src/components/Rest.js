@@ -16,6 +16,6 @@ export function Rest(props) {
 				min={1}
 				max={10}
 			/>
-	</div>
+		</div>
 	);
 }

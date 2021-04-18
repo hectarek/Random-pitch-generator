@@ -9,7 +9,7 @@
 //     canLimitOctave: false
 // }
 
-const relativeTones = ["A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#"];
+export const relativeTones = ["A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#"];
 
 export const createScale = (scale, startingNote) => {
 

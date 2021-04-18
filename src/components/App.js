@@ -18,10 +18,12 @@ import { makeStyles } from '@material-ui/core/styles';
 import * as Tone from 'tone';
 import {sampler} from '../script/instruments';
 import keys from '../script/keys';
-import {generateAllNotes, scales} from '../script/scales';
+import {relativeTones, generateAllNotes, scales, createScale} from '../script/scales';
 import {allNotesInOrder, rangeForSlider} from '../script/range';
 import octaves from '../script/octaves';
 import {randToneFromRange, tupleToAbsoluteTone, tempoIntoSeconds} from '../script/tone';
+
+const GENERATED_LIST_SIZE = 100;
 
 // useStyles 
 const useStyles = makeStyles({
@@ -38,8 +40,10 @@ const instrumentsDemo = [
 	}
 ]
 
-export default function App() {
+var sequencer = null;
+var currentScaleNotes = null;
 
+export default function App() {
   const classes = useStyles();
 
   // Setting State of Input Field Values
@@ -76,101 +80,96 @@ export default function App() {
   const [total, setTotal] = useState(lengthInSecs + restInSecs);
 
   // Error Checking on Range Fields
-
-  const errorCheckRange = () => {
-    // Logic to check to see if range is overlapping and fix
-    let minRang = tupleToAbsoluteTone([rangeN1, rangeO1]);
-    let maxRang = tupleToAbsoluteTone([rangeN2, rangeO2]);
+  const rangesInValidOrder = (note1, note2) => {
+    // Logic to check to see if range is invalid
+    let minRang = tupleToAbsoluteTone(note1);
+    let maxRang = tupleToAbsoluteTone(note2);
      
-    if (allNotesInOrder.indexOf(minRang) > allNotesInOrder.indexOf(maxRang)) {
-      setRangeN2(rangeN1);
-      setRangeO2(rangeO1);
-      setRangeN1(prevRangeN2.current);
-      setRangeO1(prevRangeO2.current);
-    }
-    console.log("This ", allNotesInOrder.indexOf(minRang), "should be shorter than");
-    console.log("this ", allNotesInOrder.indexOf(maxRang));
-
+    return (allNotesInOrder.indexOf(maxRang) >= allNotesInOrder.indexOf(minRang));
   }
 
   // Generating Note Array for Sequencer
-  const generateRandomNoteArray = () => {
-    let placeHolder = [];
-    for (let i=0; i<100; i++) {
-      placeHolder.push(randToneFromRange([[rangeN1, rangeO1], [rangeN2, rangeO2]]));
+  const randomNoteGenerator = () => {
+    // The index in allNotes of the min and max range notes
+    let minIndex = allNotesInOrder.indexOf(tupleToAbsoluteTone([rangeN1, rangeO1]));
+    let maxIndex = allNotesInOrder.indexOf(tupleToAbsoluteTone([rangeN2, rangeO2]));
+
+    let validNotes = [];
+    let allNotesInScale = generateAllNotes(scale, key);
+    for(let i = minIndex; i <= maxIndex; i++) {
+      let note = allNotesInOrder[i];
+      if(allNotesInScale.includes(note)) {
+        validNotes.push(note);
+      }
     }
-    let filter = generateAllNotes(scale, key);
-    let arr = placeHolder.filter(note => filter.includes(note));
-    return arr;
+
+    let returnList = [];
+    for(let i = 0; i < GENERATED_LIST_SIZE; i++) {
+      returnList.push(validNotes[Math.floor(Math.random() * validNotes.length)]);
+    }
+
+    return returnList;
   }
-  
+
   const [currentNote, setCurrentNote] = useState("wait")
-  const [notes, setNotes] = useState(generateRandomNoteArray())
 
    // Setting Synth State
   //  const [synth, setSynth] = useState(new Tone.Synth().toDestination());
-
-   const [synth, setSynth] = useState(sampler.toDestination());
 
   //  const [synthSettings, setSynthSettings] = useState({
   //   Synth: {
   //     oscillator: { type: "sine" },
   //   }
   // });
-
-  // Setting State for Sequencer
-   const [sequencer, setSequencer] = useState(new Tone.Sequence((time, note) => {
-     synth.triggerAttackRelease(note, lengthInSecs, time)
-     setCurrentNote(note);
-   }, notes, total));
-
-   const generateNewSequencer = () => {
-    setNotes(generateRandomNoteArray());
-    setSequencer(new Tone.Sequence((time, note) => {
-      synth.triggerAttackRelease(note, lengthInSecs, time)
-      setCurrentNote(note);
-    }, notes, total))
-   }
  
+  const updateCurrentScaleNotes = () => {
+    currentScaleNotes = createScale(scale, key);
+  }
+
   // Handle Functions
   const handleInstrumentPickerChange = (event) => {setInstrument(event.target.value);};
-  const handleRangeN1PickerChange = (event) => {setRangeN1(event.target.value);};
-  const handleRangeO1PickerChange = (event) => {setRangeO1(event.target.value);};
-  const handleRangeN2PickerChange = (event) => {setRangeN2(event.target.value);};
-  const handleRangeO2PickerChange = (event) => {setRangeO2(event.target.value);};
-  const handleScalePickerChange = (event) => {setScale(event.target.value);};
-  const handleKeyPickerChange = (event) => {setKey(event.target.value);};
+  const handleRangeN1PickerChange = (event) => {
+    if(rangesInValidOrder([event.target.value, rangeO1], [rangeN2, rangeO2])) {
+      setRangeN1(event.target.value);
+    } else {
+
+    }
+  };
+  const handleRangeO1PickerChange = (event) => {
+    if(rangesInValidOrder([rangeN1, event.target.value], [rangeN2, rangeO2])) {
+      setRangeO1(event.target.value);
+    } else {
+      
+    }
+  };
+  const handleRangeN2PickerChange = (event) => {
+    if(rangesInValidOrder([rangeN1, rangeO1], [event.target.value, rangeO2])) {
+      setRangeN2(event.target.value);
+    } else {
+      
+    }
+  };
+  const handleRangeO2PickerChange = (event) => {
+    if(rangesInValidOrder([rangeN1, rangeO1], [rangeN2, event.target.value])) {
+      setRangeO2(event.target.value);
+    } else {
+      
+    }
+  };
+  const handleScalePickerChange = (event) => {
+    setScale(event.target.value);
+    updateCurrentScaleNotes();
+  };
+  const handleKeyPickerChange = (event) => {
+    setKey(event.target.value);
+    updateCurrentScaleNotes();
+  };
   const handleSwitchesChange = (event) => {setSwitches({ ...switches, [event.target.name]: event.target.checked });};
   const handleLengthSliderChange = (event, newValue) => {setLength(newValue);};
   const handleRestSliderChange = (event, newValue) => {setRest(newValue);};
   const handleTempoSliderChange = (event, newValue) => {setTempo(newValue);};
 
   // *********************** INITIAL STATE LOGIC ***********************
-
-  // Resetting the notes range of notes
-  useEffect(() => {
-    prevRangeN1.current = rangeN1;
-    errorCheckRange();
-    setNotes(generateRandomNoteArray());
-  }, [rangeN1])
-
-  useEffect(() => {
-    prevRangeO1.current = rangeO1;
-    errorCheckRange();
-    setNotes(generateRandomNoteArray());
-  }, [rangeO1])
-
-  useEffect(() => {
-    prevRangeN2.current = rangeN2;
-    errorCheckRange();
-    setNotes(generateRandomNoteArray());
-  }, [rangeN2])
-
-  useEffect(() => {
-    prevRangeO2.current = rangeO2;
-    errorCheckRange();
-    setNotes(generateRandomNoteArray());
-  }, [rangeO2])
 
   // Recalculating Tempo and Length Logic
   useEffect(() => { 
@@ -192,10 +191,15 @@ export default function App() {
   // *********************** PLAY BUTTON LOGIC ***********************
 
   const handleClick = async () => {
-
     await Tone.start();
 
     if(!playStatus) {
+      var synth = sampler.toDestination();
+      sequencer = new Tone.Sequence((time, note) => {
+        synth.triggerAttackRelease(note, lengthInSecs, time)
+        setCurrentNote(note);
+      }, randomNoteGenerator(), total);
+
       // When you click "PLAY"
       setPlayStatus(true);
       sequencer.start();
@@ -207,10 +211,9 @@ export default function App() {
       Tone.Transport.stop();
       sequencer.stop();
       sequencer.clear();
-      generateNewSequencer();
+      
       return;
     }
-
   };
 
  // *********************** PLAY BUTTON LOGIC END ***********************

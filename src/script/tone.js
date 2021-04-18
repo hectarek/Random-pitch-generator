@@ -1,5 +1,4 @@
 //Logic for Tone JS
-
 function generateAllTonesInRange(rng) {
 
 	const relativeTones = ["A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#"];
@@ -42,4 +41,4 @@ function tempoIntoSeconds(tempo) {
 	return 60/tempo;
 }
 
-export {generateAllTonesInRange, randToneFromRange, tupleToAbsoluteTone, tempoIntoSeconds};
+export {generateAllTonesInRange, tempoIntoSeconds, randToneFromRange, tupleToAbsoluteTone};
