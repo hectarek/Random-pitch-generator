@@ -4,11 +4,10 @@ import Slider from '@material-ui/core/Slider';
 
 export function Rest(props) {
 	return (
-		<div className={props.styles.root}>
-			<Typography id="discrete-slider-small-steps" gutterBottom>Rest Length</Typography>
+		<div className={props.classes.slider}>
 			<Slider
 				defaultValue={2}
-				onChange={props.handleChange} 
+				onChange={props.handleChange}
 				aria-labelledby="discrete-slider-small-steps"
 				step={1}
 				valueLabelDisplay="auto"

@@ -13,31 +13,48 @@ import { Tempo } from './Tempo';
 
 // UI Imports
 import { makeStyles } from '@material-ui/core/styles';
+import Grid from '@material-ui/core/Grid';
 
 // Logic Imports
 import * as Tone from 'tone';
-import {sampler} from '../script/instruments';
+import { sampler } from '../script/instruments';
 import keys from '../script/keys';
-import {relativeTones, generateAllNotes, scales, createScale} from '../script/scales';
-import {allNotesInOrder, rangeForSlider} from '../script/range';
+import { generateAllNotes, scales, createScale } from '../script/scales';
+import { allNotesInOrder } from '../script/range';
 import octaves from '../script/octaves';
-import {randToneFromRange, tupleToAbsoluteTone, tempoIntoSeconds} from '../script/tone';
+import { tupleToAbsoluteTone, tempoIntoSeconds } from '../script/tone';
 
 const GENERATED_LIST_SIZE = 100;
 
 // useStyles 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   root: {
-    width: 300,
+    flexGrow: 1,
+    paddingLeft: "20%",
+    paddingRight: "20%"
   },
-});
+  currentNote: {
+    paddingTop: "10%",
+    paddingBottom: "10%",
+  },
+  button: {
+    marginTop: 40,
+    marginBottom: 40,
+  },
+  title: {
+    marginBottom: 50,
+  },
+  slider: {
+    width: "33%",
+  }
+}));
 
 const instrumentsDemo = [
   {
-		name: "Piano",
-		sound: "",
-		range: [],
-	}
+    name: "Piano",
+    sound: "",
+    range: [],
+  }
 ]
 
 var sequencer = null;
@@ -53,12 +70,6 @@ export default function App() {
   const [rangeO1, setRangeO1] = useState(3);
   const [rangeN2, setRangeN2] = useState("C");
   const [rangeO2, setRangeO2] = useState(5);
-
-  //Previous Values of range
-  const prevRangeN1 = useRef("C");
-  const prevRangeO1 = useRef(3);
-  const prevRangeN2 = useRef("C");
-  const prevRangeO2 = useRef(5);
 
   const [scale, setScale] = useState("Chromatic");
   const [key, setKey] = useState("C");
@@ -84,7 +95,7 @@ export default function App() {
     // Logic to check to see if range is invalid
     let minRang = tupleToAbsoluteTone(note1);
     let maxRang = tupleToAbsoluteTone(note2);
-     
+
     return (allNotesInOrder.indexOf(maxRang) >= allNotesInOrder.indexOf(minRang));
   }
 
@@ -96,15 +107,15 @@ export default function App() {
 
     let validNotes = [];
     let allNotesInScale = generateAllNotes(scale, key);
-    for(let i = minIndex; i <= maxIndex; i++) {
+    for (let i = minIndex; i <= maxIndex; i++) {
       let note = allNotesInOrder[i];
-      if(allNotesInScale.includes(note)) {
+      if (allNotesInScale.includes(note)) {
         validNotes.push(note);
       }
     }
 
     let returnList = [];
-    for(let i = 0; i < GENERATED_LIST_SIZE; i++) {
+    for (let i = 0; i < GENERATED_LIST_SIZE; i++) {
       returnList.push(validNotes[Math.floor(Math.random() * validNotes.length)]);
     }
 
@@ -113,47 +124,40 @@ export default function App() {
 
   const [currentNote, setCurrentNote] = useState("wait")
 
-   // Setting Synth State
-  //  const [synth, setSynth] = useState(new Tone.Synth().toDestination());
+  // Setting Synth State
 
-  //  const [synthSettings, setSynthSettings] = useState({
-  //   Synth: {
-  //     oscillator: { type: "sine" },
-  //   }
-  // });
- 
   const updateCurrentScaleNotes = () => {
     currentScaleNotes = createScale(scale, key);
   }
 
   // Handle Functions
-  const handleInstrumentPickerChange = (event) => {setInstrument(event.target.value);};
+  const handleInstrumentPickerChange = (event) => { setInstrument(event.target.value); };
   const handleRangeN1PickerChange = (event) => {
-    if(rangesInValidOrder([event.target.value, rangeO1], [rangeN2, rangeO2])) {
+    if (rangesInValidOrder([event.target.value, rangeO1], [rangeN2, rangeO2])) {
       setRangeN1(event.target.value);
     } else {
 
     }
   };
   const handleRangeO1PickerChange = (event) => {
-    if(rangesInValidOrder([rangeN1, event.target.value], [rangeN2, rangeO2])) {
+    if (rangesInValidOrder([rangeN1, event.target.value], [rangeN2, rangeO2])) {
       setRangeO1(event.target.value);
     } else {
-      
+
     }
   };
   const handleRangeN2PickerChange = (event) => {
-    if(rangesInValidOrder([rangeN1, rangeO1], [event.target.value, rangeO2])) {
+    if (rangesInValidOrder([rangeN1, rangeO1], [event.target.value, rangeO2])) {
       setRangeN2(event.target.value);
     } else {
-      
+
     }
   };
   const handleRangeO2PickerChange = (event) => {
-    if(rangesInValidOrder([rangeN1, rangeO1], [rangeN2, event.target.value])) {
+    if (rangesInValidOrder([rangeN1, rangeO1], [rangeN2, event.target.value])) {
       setRangeO2(event.target.value);
     } else {
-      
+
     }
   };
   const handleScalePickerChange = (event) => {
@@ -164,22 +168,22 @@ export default function App() {
     setKey(event.target.value);
     updateCurrentScaleNotes();
   };
-  const handleSwitchesChange = (event) => {setSwitches({ ...switches, [event.target.name]: event.target.checked });};
-  const handleLengthSliderChange = (event, newValue) => {setLength(newValue);};
-  const handleRestSliderChange = (event, newValue) => {setRest(newValue);};
-  const handleTempoSliderChange = (event, newValue) => {setTempo(newValue);};
+  const handleSwitchesChange = (event) => { setSwitches({ ...switches, [event.target.name]: event.target.checked }); };
+  const handleLengthSliderChange = (event, newValue) => { setLength(newValue); };
+  const handleRestSliderChange = (event, newValue) => { setRest(newValue); };
+  const handleTempoSliderChange = (event, newValue) => { setTempo(newValue); };
 
   // *********************** INITIAL STATE LOGIC ***********************
 
   // Recalculating Tempo and Length Logic
-  useEffect(() => { 
+  useEffect(() => {
     setTempoInSecs(tempoIntoSeconds(tempo));
   }, [tempo]);
 
   useEffect(() => {
     setLengthInSecs(length * tempoInSecs);
     setRestInSecs(rest * tempoInSecs);
-  },[length, rest, tempo]);
+  }, [length, rest, tempo]);
 
   useEffect(() => {
     setTotal(lengthInSecs + restInSecs);
@@ -193,7 +197,7 @@ export default function App() {
   const handleClick = async () => {
     await Tone.start();
 
-    if(!playStatus) {
+    if (!playStatus) {
       var synth = sampler.toDestination();
       sequencer = new Tone.Sequence((time, note) => {
         synth.triggerAttackRelease(note, lengthInSecs, time)
@@ -211,100 +215,113 @@ export default function App() {
       Tone.Transport.stop();
       sequencer.stop();
       sequencer.clear();
-      
+
       return;
     }
   };
 
- // *********************** PLAY BUTTON LOGIC END ***********************
+  // *********************** PLAY BUTTON LOGIC END ***********************
 
-	return (
-		<div className="container">
-			<Title text={"Noteworthy.music"}/>
-      <Headings text={"INSTRUMENT"}/>
-      <div className="range-container">
-        <Picker 
+  return (
+    <div className={classes.root} >
+    <Grid container direction="column" justify="center" alignItems="center" spacing={1}>
+      <Grid item className={classes.title} xs={12}>
+        <Title text={"Noteworthy.music"} />
+      </Grid>
+      <Grid item xs={12}>
+        <Headings text={"INSTRUMENT"} />
+      </Grid>
+      <Grid item xs={12}>
+        <Picker
           value={instrument}
           list={instrumentsDemo}
           helperText={"Pick an Instrument"}
           handleChange={handleInstrumentPickerChange}
         />
-        
-      </div>
-      <div className="range-container">
-        <Headings text={"PITCH"}/>
-        <Picker 
+      </Grid>
+      <Grid item xs={12}>
+        <Headings text={"PITCH"} />
+      </Grid>
+      <Grid container item direction="row" justify="space-evenly" alignItems="center">
+        <Headings text={"Lower Limit"} />
+        <Headings text={"Upper Limit"} />
+      </Grid>
+      <Grid container item direction="row" justify="space-evenly" alignItems="center">
+        <Picker
           value={rangeN1}
           list={keys}
           helperText={"Pick a Note"}
           handleChange={handleRangeN1PickerChange}
         />
-        <Picker 
+        <Picker
           value={rangeO1}
           list={octaves}
           helperText={"Pick an Octave"}
           handleChange={handleRangeO1PickerChange}
         />
-        <Picker 
+        <Picker
           value={rangeN2}
           list={keys}
           helperText={"Pick a Note"}
           handleChange={handleRangeN2PickerChange}
         />
-        <Picker 
+        <Picker
           value={rangeO2}
           list={octaves}
           helperText={"Pick an Octave"}
           handleChange={handleRangeO2PickerChange}
         />
-      </div>
-      <div className="range-container">
-        <Picker 
+      </Grid>
+      <Grid container item direction="row" justify="space-around" alignItems="center">
+        <Headings text={"Scale"} />
+        <Headings text={"Key"} />
+      </Grid>
+      <Grid container item direction="row" justify="space-around" alignItems="center">
+        <Picker
           value={scale}
           list={scales}
-          helperText={"Pick an Scale"}
+          helperText={"Pick a Scale"}
           handleChange={handleScalePickerChange}
         />
-        <Picker 
+        <Picker
           value={key}
           list={keys}
-          helperText={"Pick an Key"}
+          helperText={"Pick a Key"}
           handleChange={handleKeyPickerChange}
         />
-      </div>
-      <div className="range-container">
-        <Switches 
-          text={"Drone?"}
-          handleChange={handleSwitchesChange}
-          check={switches.drone}
-          name={"drone"}
+      </Grid>
+      <Grid container item direction="column" justify="center" alignItems="center" spacing={1}>
+        <Headings text={"Note Length"} />
+      </Grid>
+      <Grid container item direction="column" justify="center" alignItems="center" spacing={0}>
+        <Length
+          classes={classes}
+          value={length}
+          handleChange={handleLengthSliderChange}
+        />
+        <Headings text={"Note Rest"} />
+        <Rest
+          classes={classes}
+          value={rest}
+          handleChange={handleRestSliderChange}
+        />
+        <Headings text={"Tempo"} />
+        <Tempo
+          classes={classes}
+          value={tempo}
+          handleChange={handleTempoSliderChange}
+        />
+        <Grid container className={classes.button} item direction="row" justify="center" alignItems="center" xs={12} spacing={0}>
+          <Play
+            handleClick={handleClick}
+            playStatus={playStatus}
           />
-
-          <div>
-            <h1>{currentNote}</h1>
-          </div>
-      </div>  
-      
-      <Headings text={"LENGTH"}/>
-      <Length 
-        value={length}
-        styles={classes}
-        handleChange={handleLengthSliderChange}
-      />
-      <Rest 
-        value={rest}
-        styles={classes}
-        handleChange={handleRestSliderChange}
-      />
-      <Tempo 
-        value={tempo}
-        styles={classes}
-        handleChange={handleTempoSliderChange}
-      />
-      <Play 
-        handleClick={handleClick}
-        playStatus={playStatus}
-      />
-		</div>
-	);
+        </Grid>
+      </Grid>
+      <Grid container item direction="row" justify="center" alignItems="center" xs={12} spacing={0}>
+        <Headings text={currentNote} />
+      </Grid>
+    </Grid>
+    </div>
+  );
 }
