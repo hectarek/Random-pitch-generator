@@ -245,12 +245,12 @@ export default function App() {
 				<Grid item xs={12}>
 					<Headings text={"PITCH"} />
 				</Grid>
-				<Grid container item direction="row" justify="space-evenly" alignItems="center">
+				<Grid container item xs={12} direction="row" justify="space-evenly" alignItems="center">
 					<Grid container item xs={6} direction="column" justify="space-evenly" alignItems="center">
 						<Grid item xs={12}>
 							<Headings text={"Lower Limit"} />
 						</Grid>
-						<Grid item xs={6}>
+						<Grid container item xs={12} direction="row" justify="space-evenly" alignItems="center">
 							<Picker value={rangeN1} list={keys} helperText={"Pick a Note"} handleChange={handleRangeN1PickerChange} />
 							<Picker value={rangeO1} list={octaves} helperText={"Pick an Octave"} handleChange={handleRangeO1PickerChange} />
 						</Grid>
@@ -259,26 +259,24 @@ export default function App() {
 						<Grid item xs={12}>
 							<Headings text={"Upper Limit"} />
 						</Grid>
-						<Grid item xs={6}>
+						<Grid  container item xs={12} direction="row" justify="space-evenly" alignItems="center">
 							<Picker value={rangeN2} list={keys} helperText={"Pick a Note"} handleChange={handleRangeN2PickerChange} />
 							<Picker value={rangeO2} list={octaves} helperText={"Pick an Octave"} handleChange={handleRangeO2PickerChange} />
 						</Grid>
 					</Grid>
 				</Grid>
-				<Grid container item direction="row" justify="space-around" alignItems="center">
-					<Grid item xs={12}>
+				<Grid container item xs={12} direction="row" justify="space-evenly" alignItems="center">
+					<Grid container item xs={6} direction="column" justify="space-around" alignItems="center">
 						<Headings text={"Scale"} />
 						<Picker value={scale} list={scales} helperText={"Pick a Scale"} handleChange={handleScalePickerChange} />
 					</Grid>
-          <Grid item xs={12}>
+          <Grid container item xs={6} direction="column" justify="space-around" alignItems="center">
             <Headings text={"Key"} />
             <Picker value={key} list={keys} helperText={"Pick a Key"} handleChange={handleKeyPickerChange} />
           </Grid>
 				</Grid>
-				<Grid container item direction="column" justify="center" alignItems="center" spacing={1}>
-					<Headings text={"Note Length"} />
-				</Grid>
 				<Grid container item direction="column" justify="center" alignItems="center" spacing={0}>
+          <Headings text={"Note Length"} />
 					<Length classes={classes} value={length} handleChange={handleLengthSliderChange} />
 					<Headings text={"Note Rest"} />
 					<Rest classes={classes} value={rest} handleChange={handleRestSliderChange} />
