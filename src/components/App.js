@@ -13,6 +13,7 @@ import { Tempo } from './Tempo';
 
 // UI Imports
 import { makeStyles } from '@material-ui/core/styles';
+import Container from "@material-ui/core/Container";
 import Grid from '@material-ui/core/Grid';
 
 // Logic Imports
@@ -223,102 +224,57 @@ export default function App() {
   // *********************** PLAY BUTTON LOGIC END ***********************
 
   return (
-    <div className={classes.root} >
-    <Grid container direction="column" justify="center" alignItems="center" spacing={1}>
-      <Grid item className={classes.title} xs={12}>
-        <Title text={"Noteworthy.music"} />
-      </Grid>
-      <Grid item xs={12}>
-        <Headings text={"Instrument"} />
-      </Grid>
-      <Grid item xs={12}>
-        <Picker
-          value={instrument}
-          list={instrumentsDemo}
-          helperText={"Pick an Instrument"}
-          handleChange={handleInstrumentPickerChange}
-        />
-      </Grid>
-      <Grid container item direction="row" justify="space-evenly" alignItems="center">
-        <Headings text={"Lower Limit"} />
-        <Headings text={"Upper Limit"} />
-      </Grid>
-      <Grid container item direction="row" justify="space-evenly" alignItems="center">
-        <Picker
-          value={rangeN1}
-          list={keys}
-          helperText={"Pick a Note"}
-          handleChange={handleRangeN1PickerChange}
-        />
-        <Picker
-          value={rangeO1}
-          list={octaves}
-          helperText={"Pick an Octave"}
-          handleChange={handleRangeO1PickerChange}
-        />
-        <Picker
-          value={rangeN2}
-          list={keys}
-          helperText={"Pick a Note"}
-          handleChange={handleRangeN2PickerChange}
-        />
-        <Picker
-          value={rangeO2}
-          list={octaves}
-          helperText={"Pick an Octave"}
-          handleChange={handleRangeO2PickerChange}
-        />
-      </Grid>
-      <Grid container item direction="row" justify="space-around" alignItems="center">
-        <Headings text={"Scale"} />
-        <Headings text={"Key"} />
-      </Grid>
-      <Grid container item direction="row" justify="space-around" alignItems="center">
-        <Picker
-          value={scale}
-          list={scales}
-          helperText={"Pick a Scale"}
-          handleChange={handleScalePickerChange}
-        />
-        <Picker
-          value={key}
-          list={keys}
-          helperText={"Pick a Key"}
-          handleChange={handleKeyPickerChange}
-        />
-      </Grid>
-      <Grid container item direction="column" justify="center" alignItems="center" spacing={1}>
-        <Headings text={"Note Length"} />
-      </Grid>
-      <Grid container item direction="column" justify="center" alignItems="center" spacing={0}>
-        <Length
-          classes={classes}
-          value={length}
-          handleChange={handleLengthSliderChange}
-        />
-        <Headings text={"Note Rest"} />
-        <Rest
-          classes={classes}
-          value={rest}
-          handleChange={handleRestSliderChange}
-        />
-        <Headings text={"Tempo"} />
-        <Tempo
-          classes={classes}
-          value={tempo}
-          handleChange={handleTempoSliderChange}
-        />
-        <Grid container className={classes.button} item direction="row" justify="center" alignItems="center" xs={12} spacing={0}>
-          <Play
-            handleClick={handleClick}
-            playStatus={playStatus}
-          />
-        </Grid>
-      </Grid>
-      <Grid container item direction="row" justify="center" alignItems="center" xs={12} spacing={0}>
-        <Headings text={currentNote} />
-      </Grid>
-    </Grid>
-    </div>
+    <Container maxWidth="md" className={classes.root}>
+			<Grid container item xs={12} direction="column" justify="center" alignItems="center" spacing={1}>
+				<Grid item xs={12} className={classes.title}>
+					<Title text={"Noteworthy.music"} />
+				</Grid>
+				<Grid container item xs={12} direction="column" justify="space-evenly" alignItems="center">
+          <Headings text={"Instrument"} />
+					<Picker value={instrument} list={instrumentsDemo} helperText={"Pick an Instrument"} handleChange={handleInstrumentPickerChange} />
+				</Grid>
+				<Grid container item xs={12} direction="row" justify="space-evenly" alignItems="center">
+					<Grid container item xs={6} direction="column" justify="space-evenly" alignItems="center">
+						<Grid container item xs={12}>
+							<Headings text={"Lower Limit"} />
+						</Grid>
+						<Grid container item xs={12} direction="row" justify="space-evenly" alignItems="center">
+							<Picker value={rangeN1} list={keys} helperText={"Pick a Note"} handleChange={handleRangeN1PickerChange} />
+							<Picker value={rangeO1} list={octaves} helperText={"Pick an Octave"} handleChange={handleRangeO1PickerChange} />
+						</Grid>
+					</Grid>
+					<Grid container item xs={6} direction="column" justify="space-evenly" alignItems="center">
+						<Grid container item xs={12}>
+							<Headings text={"Upper Limit"} />
+						</Grid>
+						<Grid container item xs={12} direction="row" justify="space-evenly" alignItems="center">
+							<Picker value={rangeN2} list={keys} helperText={"Pick a Note"} handleChange={handleRangeN2PickerChange} />
+							<Picker value={rangeO2} list={octaves} helperText={"Pick an Octave"} handleChange={handleRangeO2PickerChange} />
+						</Grid>
+					</Grid>
+				</Grid>
+				<Grid container item xs={12} direction="row" justify="space-evenly" alignItems="center">
+					<Grid container item xs={6} direction="column" justify="space-around" alignItems="center">
+						<Headings text={"Scale"} />
+						<Picker value={scale} list={scales} helperText={"Pick a Scale"} handleChange={handleScalePickerChange} />
+					</Grid>
+          <Grid container item xs={6} direction="column" justify="space-around" alignItems="center">
+            <Headings text={"Key"} />
+            <Picker value={key} list={keys} helperText={"Pick a Key"} handleChange={handleKeyPickerChange} />
+          </Grid>
+				</Grid>
+				<Grid container item xs={12} direction="column" justify="center" alignItems="center" spacing={0}>
+          <Headings text={"Note Length"} />
+					<Length classes={classes} value={length} handleChange={handleLengthSliderChange} />
+					<Headings text={"Note Rest"} />
+					<Rest classes={classes} value={rest} handleChange={handleRestSliderChange} />
+					<Headings text={"Tempo"} />
+					<Tempo classes={classes} value={tempo} handleChange={handleTempoSliderChange} />
+					<Grid container item className={classes.button} item direction="row" justify="center" alignItems="center" xs={12} spacing={0}>
+						<Play handleClick={handleClick} playStatus={playStatus} />
+					</Grid>
+				</Grid>
+			</Grid>
+		</Container>
   );
 }
