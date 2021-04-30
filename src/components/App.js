@@ -227,10 +227,8 @@ export default function App() {
 				<Grid item className={classes.title} xs={12}>
 					<Title text={"Noteworthy.music"} />
 				</Grid>
-				<Grid item xs={12}>
-					<Headings text={"Instruments"} />
-				</Grid>
-				<Grid item xs={12}>
+				<Grid container item xs={12} direction="column" justify="center" alignItems="center">
+          <Headings text={"Instruments"} />
 					<Picker value={instrument} list={instrumentsDemo} helperText={"Pick an Instrument"} handleChange={handleInstrumentPickerChange} />
 				</Grid>
 				<Grid container item xs={12} direction="row" justify="space-evenly" alignItems="center">
