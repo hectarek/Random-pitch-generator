@@ -1,22 +1,22 @@
 {
   "files": {
     "main.css": "/Random-pitch-generator/static/css/main.f7d5f7aa.chunk.css",
-    "main.js": "/Random-pitch-generator/static/js/main.7333d751.chunk.js",
-    "main.js.map": "/Random-pitch-generator/static/js/main.7333d751.chunk.js.map",
+    "main.js": "/Random-pitch-generator/static/js/main.85f26f8f.chunk.js",
+    "main.js.map": "/Random-pitch-generator/static/js/main.85f26f8f.chunk.js.map",
     "runtime-main.js": "/Random-pitch-generator/static/js/runtime-main.eabb3fda.js",
     "runtime-main.js.map": "/Random-pitch-generator/static/js/runtime-main.eabb3fda.js.map",
-    "static/js/2.dcf2ecca.chunk.js": "/Random-pitch-generator/static/js/2.dcf2ecca.chunk.js",
-    "static/js/2.dcf2ecca.chunk.js.map": "/Random-pitch-generator/static/js/2.dcf2ecca.chunk.js.map",
+    "static/js/2.bf22eef0.chunk.js": "/Random-pitch-generator/static/js/2.bf22eef0.chunk.js",
+    "static/js/2.bf22eef0.chunk.js.map": "/Random-pitch-generator/static/js/2.bf22eef0.chunk.js.map",
     "static/js/3.9eb86987.chunk.js": "/Random-pitch-generator/static/js/3.9eb86987.chunk.js",
     "static/js/3.9eb86987.chunk.js.map": "/Random-pitch-generator/static/js/3.9eb86987.chunk.js.map",
     "index.html": "/Random-pitch-generator/index.html",
     "static/css/main.f7d5f7aa.chunk.css.map": "/Random-pitch-generator/static/css/main.f7d5f7aa.chunk.css.map",
-    "static/js/2.dcf2ecca.chunk.js.LICENSE.txt": "/Random-pitch-generator/static/js/2.dcf2ecca.chunk.js.LICENSE.txt"
+    "static/js/2.bf22eef0.chunk.js.LICENSE.txt": "/Random-pitch-generator/static/js/2.bf22eef0.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.eabb3fda.js",
-    "static/js/2.dcf2ecca.chunk.js",
+    "static/js/2.bf22eef0.chunk.js",
     "static/css/main.f7d5f7aa.chunk.css",
-    "static/js/main.7333d751.chunk.js"
+    "static/js/main.85f26f8f.chunk.js"
   ]
 }
