@@ -30,24 +30,22 @@ const GENERATED_LIST_SIZE = 100;
 // useStyles 
 const useStyles = makeStyles((theme) => ({
   root: {
-    flexGrow: 1,
-    paddingLeft: "20%",
-    paddingRight: "20%"
-  },
-  currentNote: {
-    paddingTop: "10%",
-    paddingBottom: "10%",
-  },
-  button: {
-    marginTop: 40,
-    marginBottom: 40,
-  },
-  title: {
-    marginBottom: 50,
-  },
-  slider: {
-    width: "33%",
-  }
+		flexGrow: 1,
+	},
+	currentNote: {
+		paddingTop: "10%",
+		paddingBottom: "10%",
+	},
+	button: {
+		marginTop: 20,
+		marginBottom: 20,
+	},
+	title: {
+		marginBottom: 30,
+	},
+	slider: {
+		width: "33%",
+	}
 }));
 
 const instrumentsDemo = [
@@ -225,17 +223,19 @@ export default function App() {
 
   return (
     <Container maxWidth="md" className={classes.root}>
-			<Grid container item xs={12} direction="column" justify="center" alignItems="center" spacing={1}>
-				<Grid item xs={12} className={classes.title}>
+			<Grid container direction="column" justify="center" alignItems="center" spacing={1}>
+				<Grid item className={classes.title} xs={12}>
 					<Title text={"Noteworthy.music"} />
 				</Grid>
-				<Grid container item xs={12} direction="column" justify="space-evenly" alignItems="center">
-          <Headings text={"Instrument"} />
+				<Grid item xs={12}>
+					<Headings text={"Instruments"} />
+				</Grid>
+				<Grid item xs={12}>
 					<Picker value={instrument} list={instrumentsDemo} helperText={"Pick an Instrument"} handleChange={handleInstrumentPickerChange} />
 				</Grid>
 				<Grid container item xs={12} direction="row" justify="space-evenly" alignItems="center">
 					<Grid container item xs={6} direction="column" justify="space-evenly" alignItems="center">
-						<Grid container item xs={12}>
+						<Grid item xs={12}>
 							<Headings text={"Lower Limit"} />
 						</Grid>
 						<Grid container item xs={12} direction="row" justify="space-evenly" alignItems="center">
@@ -244,10 +244,10 @@ export default function App() {
 						</Grid>
 					</Grid>
 					<Grid container item xs={6} direction="column" justify="space-evenly" alignItems="center">
-						<Grid container item xs={12}>
+						<Grid item xs={12}>
 							<Headings text={"Upper Limit"} />
 						</Grid>
-						<Grid container item xs={12} direction="row" justify="space-evenly" alignItems="center">
+						<Grid  container item xs={12} direction="row" justify="space-evenly" alignItems="center">
 							<Picker value={rangeN2} list={keys} helperText={"Pick a Note"} handleChange={handleRangeN2PickerChange} />
 							<Picker value={rangeO2} list={octaves} helperText={"Pick an Octave"} handleChange={handleRangeO2PickerChange} />
 						</Grid>
@@ -263,14 +263,14 @@ export default function App() {
             <Picker value={key} list={keys} helperText={"Pick a Key"} handleChange={handleKeyPickerChange} />
           </Grid>
 				</Grid>
-				<Grid container item xs={12} direction="column" justify="center" alignItems="center" spacing={0}>
+				<Grid container item direction="column" justify="center" alignItems="center" spacing={0}>
           <Headings text={"Note Length"} />
 					<Length classes={classes} value={length} handleChange={handleLengthSliderChange} />
 					<Headings text={"Note Rest"} />
 					<Rest classes={classes} value={rest} handleChange={handleRestSliderChange} />
 					<Headings text={"Tempo"} />
 					<Tempo classes={classes} value={tempo} handleChange={handleTempoSliderChange} />
-					<Grid container item className={classes.button} item direction="row" justify="center" alignItems="center" xs={12} spacing={0}>
+					<Grid container className={classes.button} item direction="row" justify="center" alignItems="center" xs={12} spacing={0}>
 						<Play handleClick={handleClick} playStatus={playStatus} />
 					</Grid>
 				</Grid>
