@@ -12,7 +12,7 @@ export function Rest(props) {
 				step={1}
 				valueLabelDisplay="auto"
 				marks
-				min={1}
+				min={0}
 				max={10}
 			/>
 		</div>

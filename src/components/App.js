@@ -229,7 +229,7 @@ export default function App() {
         <Title text={"Noteworthy.music"} />
       </Grid>
       <Grid item xs={12}>
-        <Headings text={"INSTRUMENT"} />
+        <Headings text={"Instrument"} />
       </Grid>
       <Grid item xs={12}>
         <Picker
@@ -238,9 +238,6 @@ export default function App() {
           helperText={"Pick an Instrument"}
           handleChange={handleInstrumentPickerChange}
         />
-      </Grid>
-      <Grid item xs={12}>
-        <Headings text={"PITCH"} />
       </Grid>
       <Grid container item direction="row" justify="space-evenly" alignItems="center">
         <Headings text={"Lower Limit"} />
