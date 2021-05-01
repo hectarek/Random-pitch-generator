@@ -2,10 +2,8 @@
 
 ### Idea by Robert
 
-## Link to Demo Here:  https://hectarek.github.io/Random-pitch-generator/ 
-
-### Alternate Link: https://noteworthyappdotnet.herokuapp.com/
-
+## Link to Demo Here: https://noteworthyappdotnet.herokuapp.com/
+ 
 ## What it does:
 
 - Spits out random pitches (Done)
@@ -18,3 +16,4 @@
 
 ## Know Issues:
 
+- Tempo is not presise

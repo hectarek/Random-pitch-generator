@@ -257,7 +257,7 @@ export default function App() {
     <Container maxWidth="md" className={classes.root}>
       <Grid container direction="column" justify="center" alignItems="center" spacing={1}>
         <Grid item className={classes.title} xs={12}>
-          <Title text={"Noteworthy.music"} />
+          <Title text={"Noteworthyapp.net"} />
         </Grid>
         <Grid container item xs={12} direction="column" justify="center" alignItems="center">
           <Headings text={"Instruments"} />
