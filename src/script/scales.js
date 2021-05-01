@@ -9,7 +9,7 @@
 //     canLimitOctave: false
 // }
 
-export const relativeTones = ["A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#"];
+const relativeTones = ["A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#"];
 
 export const createScale = (scale, startingNote) => {
 
@@ -78,6 +78,12 @@ export const scales = [
 		canLimitOctave: false,
 	},
 	{
+		name: "Bebop Scale",
+		notesInC: [],
+		pattern: [0,2,4,6,8,9,10,12],
+		canLimitOctave: false,
+	},
+	{
 		name: "Ionian",
 		notesInC: [],
 		pattern: [0,2,4,5,7,9,11,12],
@@ -127,4 +133,4 @@ export const scales = [
 	}
 ];
 
-export default {createScale , scales};
+export default {generateAllNotes, createScale, scales};

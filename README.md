@@ -4,6 +4,8 @@
 
 ## Link to Demo Here:  https://hectarek.github.io/Random-pitch-generator/ 
 
+### Alternate Link: https://noteworthyappdotnet.herokuapp.com/
+
 ## What it does:
 
 - Spits out random pitches (Done)
@@ -16,5 +18,3 @@
 
 ## Know Issues:
 
-- Will error out if you try to do upper range that is lower than low range. 
-- When you set the sequencer before you play, it doesn't update the notes right away. 
