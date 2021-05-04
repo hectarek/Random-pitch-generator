@@ -175,11 +175,6 @@ export default function App() {
   const handleTempoSliderChange = (event, newValue) => { setTempo(newValue); };
 
   // *********************** INITIAL STATE LOGIC ***********************
- 
-  useEffect(() => {
-  // To lazy to make another so add disable to switch
-  let dSwitch = document.querySelector('.PrivateSwitchBase-input-13').setAttribute("disabled", true);
-  }, []);
 
   // Recalculating Tempo and Length Logic
   useEffect(() => {
