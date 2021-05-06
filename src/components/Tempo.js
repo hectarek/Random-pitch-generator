@@ -9,7 +9,7 @@ export function Tempo(props) {
 				onChange={props.handleChange}
 				aria-labelledby="tempo-markings"
 				step={1}
-				min={0}
+				min={40}
 				max={400}
 				valueLabelDisplay="auto"
 			/>

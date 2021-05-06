@@ -3,7 +3,7 @@ import Typography from "@material-ui/core/Typography";
 
 export function Headings(props) {
 	return (
-		<Typography variant="h6" component="h6">
+		<Typography color="primary" variant="body1" component="body1">
 			{props.text}
 		</Typography>
 	);

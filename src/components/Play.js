@@ -9,7 +9,7 @@ export function Play(props) {
 	}
 	
 	return (
-		<div className="container-box">
+		<div>
 			<Button 
 				id="pitch-button" 
 				variant="contained" 

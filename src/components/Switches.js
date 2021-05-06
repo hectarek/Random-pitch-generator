@@ -1,18 +1,33 @@
 import { React } from "react";
 import Switch from "@material-ui/core/Switch";
-import Typography from "@material-ui/core/Typography";
+import FormGroup from '@material-ui/core/FormGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 
 export function Switches(props) {
-	return (
-		<div className="container-box tad-margin">
-            <Typography id="range-slider" gutterBottom>{props.text}</Typography>
-            <Switch 
-                checked={props.check} 
-                onChange={props.handleChange} 
-                color="primary" 
-                name={props.name}
-                inputProps={{ "aria-label": "primary checkbox" }}
+    return (
+        <FormGroup row>
+            <FormControlLabel control={
+                <Switch
+                    checked={props.check.drone}
+                    onChange={props.handleChange}
+                    color="secondary"
+                    name={props.nameA}
+                    inputProps={{ "aria-label": "primary checkbox" }}
+                />
+            }
+                label={props.labelA}
             />
-		</div>
-	);
+            <FormControlLabel control={
+                <Switch
+                    checked={props.check.metronome}
+                    onChange={props.handleChange}
+                    color="secondary"
+                    name={props.nameB}
+                    inputProps={{ "aria-label": "primary checkbox" }}
+                />
+            }
+                label={props.labelB}
+            />
+        </FormGroup>
+    );
 }

@@ -30,7 +30,7 @@ export const sampler = new Tone.Sampler({
 		"D#5": "ds4.mp3",
 		"F#5": "fs4.mp3",
 		A5: "a4.mp3",
-		C5: "c5.mp3",
+		C6: "c5.mp3",
 		"D#6": "ds5.mp3",
 		"F#6": "fs5.mp3",
 		A6: "a5.mp3",
