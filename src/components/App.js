@@ -17,7 +17,7 @@ import Grid from '@material-ui/core/Grid';
 
 // Logic Imports
 import * as Tone from 'tone';
-import { sampler } from '../script/instruments';
+import { piano, orchestra } from '../script/instruments';
 import keys from '../script/keys';
 import { generateAllNotes, scales, createScale } from '../script/scales';
 import { allNotesInOrder } from '../script/range';
@@ -74,6 +74,7 @@ export default function App() {
 
   const [scale, setScale] = useState("Chromatic");
   const [key, setKey] = useState("C");
+  const [tonic, setTonic] = useState("C4")
 
   const [switches, setSwitches] = useState({
     drone: false,
@@ -197,15 +198,15 @@ export default function App() {
     await Tone.start();
 
     if (!playStatus) {
-      let synthA = sampler.toDestination();
+      let synthA = piano.toDestination();
       sequencer = new Tone.Sequence((time, note) => {
         synthA.triggerAttackRelease(note, lengthInSecs, time)
       }, randomNoteGenerator(), total).start(0);
 
       // if (switches.drone) {
-      //   let synthB = new Tone.Synth().toDestination();
+      //   let synthB = orchestra.toDestination();
       //   drone = new Tone.Loop(time => {
-      //     synthB.triggerAttackRelease("C3", time, time);
+      //     synthB.triggerAttackRelease(tonic, (time-0.01), time);
       //   }, tempoInSecs).start(0);
       // }
 
@@ -300,7 +301,7 @@ export default function App() {
           </Grid>
           <Grid container item xs={10} sm={8} md={6}>
             <Grid item xs={4}>
-              <Headings text={"Note Rest"} />
+              <Headings text={"Rest Length"} />
             </Grid>
             <Grid container item xs={8}>
               <Rest classes={classes} value={rest} handleChange={handleRestSliderChange} />

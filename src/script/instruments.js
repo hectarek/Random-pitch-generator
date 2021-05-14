@@ -11,7 +11,7 @@ import * as Tone from 'tone';
 //     type: ""
 // }
 
-export const sampler = new Tone.Sampler({
+export const piano = new Tone.Sampler({
 	urls: {
 		A1: "a0.mp3",
 		C2: "c1.mp3",
@@ -45,6 +45,42 @@ export const sampler = new Tone.Sampler({
 		// C8: "c8.mp3"
 	},
 	baseUrl: "https://ledlamp.github.io/piano-sounds/GreatAndSoftPiano/"
+}).toDestination();
+
+export const orchestra = new Tone.Sampler({
+	urls: {
+		A1: "a0.wav",
+		C2: "c1.wav",
+		"D#2": "ds1.wav",
+		"F#2": "fs1.wav",
+		A2: "a1.wav",
+		C3: "c2.wav",
+		"D#3": "ds2.wav",
+		"F#3": "fs2.wav",
+		A3: "a2.wav",
+		C4: "c3.wav",
+		"D#4": "ds3.wav",
+		"F#4": "fs3.wav",
+		A4: "a3.wav",
+		C5: "c4.wav",
+		"D#5": "ds4.wav",
+		"F#5": "fs4.wav",
+		A5: "a4.wav",
+		C6: "c5.wav",
+		"D#6": "ds5.wav",
+		"F#6": "fs5.wav",
+		A6: "a5.wav",
+		C7: "c6.wav",
+		// "D#7": "ds6.wav",
+		// "F#7": "fs6.wav",
+		// A7: "a6.wav",
+		// C7: "c7.wav",
+		// "D#7": "ds7.wav",
+		// "F#7": "fs7.wav",
+		// A7: "a7.wav",
+		// C8: "c8.wav"
+	},
+	baseUrl: "https://ledlamp.github.io/piano-sounds/Orchestra/"
 }).toDestination();
 
 const pianoNotesKey = {
@@ -361,4 +397,4 @@ export const instruments = [
 	},
 ];
 
-export default { sampler, instruments };
+export default { piano, orchestra, instruments };
