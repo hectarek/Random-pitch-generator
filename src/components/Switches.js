@@ -28,6 +28,17 @@ export function Switches(props) {
             }
                 label={props.labelB}
             />
+            <FormControlLabel control={
+                <Switch
+                    checked={props.check.multiNote}
+                    onChange={props.handleChange}
+                    color="secondary"
+                    name={props.nameC}
+                    inputProps={{ "aria-label": "primary checkbox" }}
+                />
+            }
+                label={props.labelC}
+            />
         </FormGroup>
     );
 }

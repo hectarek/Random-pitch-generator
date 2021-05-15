@@ -8,6 +8,7 @@ import { Title } from "./Title";
 import { Play } from "./Play";
 import { Headings } from './Heading';
 import { Rest } from './Rest';
+import { MultiNote } from './MultiNote';
 import { Tempo } from './Tempo';
 
 // UI Imports
@@ -79,9 +80,11 @@ export default function App() {
   const [switches, setSwitches] = useState({
     drone: false,
     metronome: false,
+    multiNote: false,
   });
 
   const [length, setLength] = useState(2);
+  const [multiNote, setMultiNote] = useState(2);
   const [rest, setRest] = useState(2);
   const [tempo, setTempo] = useState(120);
   const [playStatus, setPlayStatus] = useState(false);
@@ -170,6 +173,7 @@ export default function App() {
   };
   const handleSwitchesChange = (event) => { setSwitches({ ...switches, [event.target.name]: event.target.checked }); };
   const handleLengthSliderChange = (event, newValue) => { setLength(newValue); };
+  const handleMultiNoteSliderChange = (event, newValue) => { setMultiNote(newValue); };
   const handleRestSliderChange = (event, newValue) => { setRest(newValue); };
   const handleTempoSliderChange = (event, newValue) => { setTempo(newValue); };
 
@@ -288,7 +292,7 @@ export default function App() {
           </Grid>
         </Grid>
         <Grid container item xs={12} direction="row" justify="space-evenly" alignItems="center">
-          <Switches check={switches} nameA={"drone"} nameB={"metronome"} labelA={"Drone"} labelB={"Metronome"} handleChange={handleSwitchesChange} />
+          <Switches check={switches} nameA={"drone"} nameB={"metronome"} nameC={"multiNote"} labelA={"Drone"} labelB={"Metronome"} labelC={"Multi-Note"} handleChange={handleSwitchesChange} />
         </Grid>
         <Grid container item direction="column" justify="center" alignItems="center" spacing={0}>
           <Grid container item xs={10} sm={8} md={6}>
@@ -299,6 +303,16 @@ export default function App() {
               <Length classes={classes} value={length} handleChange={handleLengthSliderChange} />
             </Grid>
           </Grid>
+          {switches.multiNote &&
+            <Grid container item xs={10} sm={8} md={6}>
+              <Grid item xs={4}>
+                <Headings text={"Multi Notes"} />
+              </Grid>
+              <Grid container item xs={8}>
+                <MultiNote classes={classes} value={rest} handleChange={handleMultiNoteSliderChange} />
+              </Grid>
+            </Grid>
+          }
           <Grid container item xs={10} sm={8} md={6}>
             <Grid item xs={4}>
               <Headings text={"Rest Length"} />

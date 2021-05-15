@@ -2,8 +2,7 @@
 
 ### Idea by Robert
 
-## Link to Demo Here: https://noteworthyappdotnet.herokuapp.com/
- 
+## Link to Demo Here: https://noteworthyapp.net
 ## What it does:
 
 - Spits out random pitches (Done)
