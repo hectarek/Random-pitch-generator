@@ -1,4 +1,4 @@
-import { React, useState, useEffect } from 'react';
+import { React, useState, useEffect, useLayoutEffect } from 'react';
 
 // Component Imports 
 import { Length } from "./Length";
@@ -24,6 +24,7 @@ import { generateAllNotes, scales, createScale } from '../script/scales';
 import { allNotesInOrder } from '../script/range';
 import octaves from '../script/octaves';
 import { tupleToAbsoluteTone, tempoIntoSeconds } from '../script/tone';
+import { Synth } from 'tone';
 
 const GENERATED_LIST_SIZE = 100;
 
@@ -75,19 +76,23 @@ export default function App() {
 
   const [scale, setScale] = useState("Chromatic");
   const [key, setKey] = useState("C");
-  const [tonic, setTonic] = useState("C4")
+  const [tonic, setTonic] = useState("C3")
 
   const [switches, setSwitches] = useState({
     drone: false,
     metronome: false,
     multiNote: false,
   });
+  const [drone, setDrone] = useState(new Synth().toDestination())
+  // Remove after done
+  const [inProgress, setInProgress] = useState(true);
 
   const [length, setLength] = useState(2);
   const [multiNote, setMultiNote] = useState(2);
   const [rest, setRest] = useState(2);
   const [tempo, setTempo] = useState(120);
   const [playStatus, setPlayStatus] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   // Setting State of Calculated Values
   const [tempoInSecs, setTempoInSecs] = useState(tempoIntoSeconds(tempo))
@@ -127,10 +132,18 @@ export default function App() {
     return returnList;
   }
 
+  const delayPlayButton = () => {
+    setIsLoading(true)
+    setTimeout(() => {
+      setIsLoading(false)
+    }, 1500);
+  }
+
   // Setting Synth State
 
   const updateCurrentScaleNotes = () => {
     currentScaleNotes = createScale(scale, key);
+    setTonic(key+"3");
   }
 
   // Handle Functions
@@ -179,18 +192,25 @@ export default function App() {
 
   // *********************** INITIAL STATE LOGIC ***********************
 
+  useEffect(() => {
+    delayPlayButton();
+  }, [rangeN1, rangeO1, rangeN2, rangeO2, scale, key, switches])
+
   // Recalculating Tempo and Length Logic
   useEffect(() => {
     setTempoInSecs(tempoIntoSeconds(tempo));
+    delayPlayButton();
   }, [tempo]);
-
+  
   useEffect(() => {
     setLengthInSecs(length * tempoInSecs);
     setRestInSecs(rest * tempoInSecs);
-  }, [length, rest, tempo]);
+    delayPlayButton();
+  }, [length, rest, multiNote, tempo]);
 
   useEffect(() => {
     setTotal(lengthInSecs + restInSecs);
+    delayPlayButton();
   }, [lengthInSecs, restInSecs]);
 
   // *********************** END INITIAL STATE LOGIC ***********************
@@ -207,13 +227,6 @@ export default function App() {
         synthA.triggerAttackRelease(note, lengthInSecs, time)
       }, randomNoteGenerator(), total).start(0);
 
-      // if (switches.drone) {
-      //   let synthB = orchestra.toDestination();
-      //   drone = new Tone.Loop(time => {
-      //     synthB.triggerAttackRelease(tonic, (time-0.01), time);
-      //   }, tempoInSecs).start(0);
-      // }
-
       if (switches.metronome) {
         let synthC = new Tone.PluckSynth().toDestination();
         metronome = new Tone.Loop(time => {
@@ -224,9 +237,9 @@ export default function App() {
       // When you click "PLAY"
       setPlayStatus(true);
       sequencer.start();
-      // if (switches.drone) {
-      //   drone.start();
-      // }
+      if (switches.drone) {
+        drone.triggerAttack(tonic, Tone.now())
+      }
       if (switches.metronome) {
         metronome.start();
       }
@@ -238,9 +251,9 @@ export default function App() {
       Tone.Transport.stop();
       sequencer.stop();
       sequencer.clear();
-      // if (switches.drone) {
-      //   drone.stop();
-      // }
+      if (switches.drone) {
+        drone.triggerRelease(Tone.now())
+      }
       if (switches.metronome) {
         metronome.stop();
       }
@@ -292,7 +305,7 @@ export default function App() {
           </Grid>
         </Grid>
         <Grid container item xs={12} direction="row" justify="space-evenly" alignItems="center">
-          <Switches check={switches} nameA={"drone"} nameB={"metronome"} nameC={"multiNote"} labelA={"Drone"} labelB={"Metronome"} labelC={"Multi-Note"} handleChange={handleSwitchesChange} />
+          <Switches check={switches} nameA={"drone"} nameB={"metronome"} nameC={"multiNote"} labelA={"Drone"} labelB={"Metronome"} labelC={"Multi-Note"} isDisabled={inProgress} handleChange={handleSwitchesChange} />
         </Grid>
         <Grid container item direction="column" justify="center" alignItems="center" spacing={0}>
           <Grid container item xs={10} sm={8} md={6}>
@@ -330,7 +343,7 @@ export default function App() {
             </Grid>
           </Grid>
           <Grid container item direction="row" justify="center" alignItems="center" xs={12} spacing={0}>
-            <Play handleClick={handleClick} playStatus={playStatus} />
+            <Play isDisabled={isLoading} handleClick={handleClick} playStatus={playStatus} />
           </Grid>
         </Grid>
       </Grid>

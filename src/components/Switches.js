@@ -34,6 +34,7 @@ export function Switches(props) {
                     onChange={props.handleChange}
                     color="secondary"
                     name={props.nameC}
+                    disabled={props.isDisabled}
                     inputProps={{ "aria-label": "primary checkbox" }}
                 />
             }
