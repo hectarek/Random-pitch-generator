@@ -200,7 +200,7 @@ export default function App() {
       let synthA = sampler.toDestination();
       sequencer = new Tone.Sequence((time, note) => {
         synthA.triggerAttackRelease(note, lengthInSecs, time)
-      }, randomNoteGenerator(), total).start(0);
+      }, randomNoteGenerator(), tempoInSecs).start(0);
 
       // if (switches.drone) {
       //   let synthB = new Tone.Synth().toDestination();
@@ -236,7 +236,7 @@ export default function App() {
       // if (switches.drone) {
       //   drone.stop();
       // }
-      if (switches.metronome) {
+      if (switches.metronome && metronome) {
         metronome.stop();
       }
 
